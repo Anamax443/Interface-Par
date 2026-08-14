@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>git-nástěnka — návrh rozhraní</title>
+
+<style>
+  :root {
+    --chrome:      #edeff2;
+    --chrome-hi:   #f6f7f9;
+    --pane:        #ffffff;
+    --head:        #e3e7eb;
+    --row-alt:     #f8f9fb;
+    --hover:       #e6eaee;
+    --border:      #c9cfd6;
+    --border-soft: #dde1e6;
+    --text:        #1a1e22;
+    --text-dim:    #5c656e;
+    --text-faint:  #8b939b;
+    --accent:      #31628c;
+    --accent-fg:   #ffffff;
+    --accent-soft: rgba(49, 98, 140, .14);
+    --ok:          #3d7f4c;
+    --warn:        #96700d;
+    --crit:        #a93b31;
+    --idle:        #8b939b;
+    --shadow:      0 4px 14px rgba(20, 30, 40, .16), 0 0 0 1px rgba(20, 30, 40, .07);
+
+    --mono: "Cascadia Mono", Consolas, "SF Mono", "Liberation Mono", monospace;
+    --ui: "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, "Noto Sans", sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --chrome:      #191b1e;
+      --chrome-hi:   #212429;
+      --pane:        #1f2226;
+      --head:        #262a2f;
+      --row-alt:     #23262b;
+      --hover:       #2b3036;
+      --border:      #32373d;
+      --border-soft: #2a2e34;
+      --text:        #dde2e7;
+      --text-dim:    #8a939c;
+      --text-faint:  #6b747d;
+      --accent:      #6a9cce;
+      --accent-fg:   #10151a;
+      --accent-soft: rgba(106, 156, 206, .18);
+      --ok:          #63ac72;
+      --warn:        #c79a33;
+      --crit:        #dc6b60;
+      --idle:        #6b747d;
+      --shadow:      0 4px 16px rgba(0, 0, 0, .5), 0 0 0 1px rgba(255, 255, 255, .06);
+    }
+  }
+
+  :root[data-theme="light"] {
+    --chrome:      #edeff2;
+    --chrome-hi:   #f6f7f9;
+    --pane:        #ffffff;
+    --head:        #e3e7eb;
+    --row-alt:     #f8f9fb;
+    --hover:       #e6eaee;
+    --border:      #c9cfd6;
+    --border-soft: #dde1e6;
+    --text:        #1a1e22;
+    --text-dim:    #5c656e;
+    --text-faint:  #8b939b;
+    --accent:      #31628c;
+    --accent-fg:   #ffffff;
+    --accent-soft: rgba(49, 98, 140, .14);
+    --ok:          #3d7f4c;
+    --warn:        #96700d;
+    --crit:        #a93b31;
+    --idle:        #8b939b;
+    --shadow:      0 4px 14px rgba(20, 30, 40, .16), 0 0 0 1px rgba(20, 30, 40, .07);
+  }
+
+  :root[data-theme="dark"] {
+    --chrome:      #191b1e;
+    --chrome-hi:   #212429;
+    --pane:        #1f2226;
+    --head:        #262a2f;
+    --row-alt:     #23262b;
+    --hover:       #2b3036;
+    --border:      #32373d;
+    --border-soft: #2a2e34;
+    --text:        #dde2e7;
+    --text-dim:    #8a939c;
+    --text-faint:  #6b747d;
+    --accent:      #6a9cce;
+    --accent-fg:   #10151a;
+    --accent-soft: rgba(106, 156, 206, .18);
+    --ok:          #63ac72;
+    --warn:        #c79a33;
+    --crit:        #dc6b60;
+    --idle:        #6b747d;
+    --shadow:      0 4px 16px rgba(0, 0, 0, .5), 0 0 0 1px rgba(255, 255, 255, .06);
+  }
+
+  html, body { height: 100%; }
+
+  body {
+    margin: 0;
+    font-family: var(--ui);
+    font-size: 12.5px;
+    line-height: 1.35;
+    color: var(--text);
+    background: var(--chrome);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .icon { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .icon-sm { width: 13px; height: 13px; }
+
+  :focus-visible { outline: 1px solid var(--accent); outline-offset: -2px; }
+
+  /* ---------- shell ---------- */
+
+  .app {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 178px 1fr;
+    grid-template-rows: 33px 1fr 23px;
+    grid-template-areas:
+      "title  title"
+      "nav    main"
+      "status status";
+    background: var(--chrome);
+  }
+
+  /* ---------- title strip ---------- */
+
+  .titlebar {
+    grid-area: title;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 10px;
+    background: var(--chrome-hi);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .brand { display: flex; align-items: center; gap: 7px; font-weight: 600; letter-spacing: .1px; }
+  .brand .mark {
+    width: 15px; height: 15px; flex: none;
+    border: 1.5px solid var(--accent);
+    border-radius: 2px;
+    position: relative;
+  }
+  .brand .mark::after {
+    content: ""; position: absolute; inset: 3px 3px auto 3px; height: 1.5px; background: var(--accent);
+    box-shadow: 0 3px 0 var(--accent);
+  }
+  .brand .org { color: var(--text-dim); font-weight: 400; }
+
+  .titlebar .sep { width: 1px; align-self: stretch; margin: 6px 2px; background: var(--border); }
+
+  .field { display: flex; align-items: center; gap: 6px; color: var(--text-dim); }
+  .field label { white-space: nowrap; }
+
+  select, .search input {
+    font: inherit;
+    color: var(--text);
+    background: var(--pane);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 2px 5px;
+    height: 22px;
+  }
+  select { padding-right: 2px; }
+
+  .search { position: relative; display: flex; align-items: center; }
+  .search .icon { position: absolute; left: 5px; color: var(--text-faint); pointer-events: none; }
+  .search input { padding-left: 25px; width: 190px; }
+  .search input::placeholder { color: var(--text-faint); }
+
+  .spacer { flex: 1; }
+
+  .chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    height: 21px; padding: 0 7px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: var(--pane);
+    color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- sidebar ---------- */
+
+  .nav {
+    grid-area: nav;
+    background: var(--chrome);
+    border-right: 1px solid var(--border);
+    padding: 4px 0;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .navitem {
+    display: flex; align-items: center; gap: 9px;
+    width: 100%;
+    height: 27px;
+    padding: 0 8px 0 11px;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: var(--text);
+    text-align: left;
+    cursor: default;
+  }
+  .navitem:hover { background: var(--hover); }
+  .navitem .icon { color: var(--text-dim); }
+  .navitem[aria-current="true"] {
+    background: var(--accent-soft);
+    box-shadow: inset 2px 0 0 var(--accent);
+    font-weight: 600;
+  }
+  .navitem[aria-current="true"] .icon { color: var(--accent); }
+  .navitem .chev { margin-left: auto; color: var(--text-faint); }
+  .navitem[aria-expanded="true"] { background: var(--hover); }
+
+  .navgroup-label {
+    padding: 11px 11px 4px;
+    font-size: 10.5px;
+    letter-spacing: .55px;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  /* flyout, the one place a shadow is allowed */
+  .flyout {
+    position: absolute;
+    left: 176px;
+    z-index: 20;
+    display: none;
+    grid-template-columns: max-content max-content;
+    gap: 0 26px;
+    padding: 6px 14px 8px;
+    background: var(--pane);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    box-shadow: var(--shadow);
+  }
+  .flyout[data-open="true"] { display: grid; }
+  .flyout button {
+    display: block; width: 100%;
+    padding: 3px 6px 3px 4px;
+    border: 0; background: none; font: inherit; color: var(--text);
+    text-align: left; white-space: nowrap; cursor: default;
+  }
+  .flyout button:hover { background: var(--accent-soft); }
+
+  /* ---------- main ---------- */
+
+  .main {
+    grid-area: main;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: var(--pane);
+  }
+
+  .panehead {
+    display: flex; align-items: center; gap: 7px;
+    height: 26px;
+    padding: 0 9px;
+    background: var(--accent-soft);
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+  }
+  .panehead .icon { color: var(--accent); }
+  .panehead .count { margin-left: auto; font-weight: 400; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+
+  .toolbar {
+    display: flex; align-items: center; gap: 1px;
+    height: 30px;
+    padding: 0 5px;
+    background: var(--chrome-hi);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  .tbtn {
+    display: inline-flex; align-items: center; gap: 5px;
+    height: 22px; padding: 0 8px;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    background: none;
+    font: inherit; color: var(--text);
+    white-space: nowrap;
+    cursor: default;
+  }
+  .tbtn .icon { color: var(--text-dim); }
+  .tbtn:hover:not(:disabled) { background: var(--pane); border-color: var(--border); }
+  .tbtn:active:not(:disabled) { background: var(--hover); }
+  .tbtn:disabled { color: var(--text-faint); }
+  .tbtn:disabled .icon { color: var(--text-faint); opacity: .6; }
+  .tbtn.primary .icon { color: var(--accent); }
+  .toolbar .sep { width: 1px; height: 16px; margin: 0 5px; background: var(--border); flex: none; }
+
+  .gridwrap { flex: 1; overflow: auto; }
+
+  table { border-collapse: collapse; width: 100%; min-width: 1080px; }
+
+  thead th {
+    position: sticky; top: 0; z-index: 5;
+    height: 25px;
+    padding: 0 8px;
+    background: var(--head);
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border-soft);
+    font-weight: 600;
+    font-size: 11.5px;
+    color: var(--text-dim);
+    text-align: left;
+    white-space: nowrap;
+    cursor: default;
+    user-select: none;
+  }
+  thead th:hover { color: var(--text); }
+  thead th .arrow { color: var(--accent); font-size: 8px; margin-left: 3px; visibility: hidden; }
+  thead th[aria-sort="ascending"] .arrow,
+  thead th[aria-sort="descending"] .arrow { visibility: visible; }
+  thead th[aria-sort="descending"] .arrow { display: inline-block; transform: rotate(180deg); }
+
+  tbody td {
+    height: 26px;
+    padding: 0 8px;
+    border-bottom: 1px solid var(--border-soft);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  tbody tr:nth-child(even) { background: var(--row-alt); }
+  tbody tr:hover td { background: var(--hover); }
+  tbody tr[data-selected="true"] td { background: var(--accent-soft); }
+  tbody tr[data-selected="true"] td:first-child { box-shadow: inset 2px 0 0 var(--accent); }
+
+  .col-check { width: 28px; padding-left: 9px; }
+  .col-flag  { width: 30px; text-align: center; font-family: var(--mono); font-size: 11px; color: var(--text-dim); }
+  .col-num   { width: 78px; text-align: right; font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 11.5px; }
+  .col-time  { width: 132px; font-family: var(--mono); font-size: 11.5px; color: var(--text-dim); }
+  th.col-num { text-align: right; }
+
+  input[type="checkbox"] { width: 13px; height: 13px; margin: 0; accent-color: var(--accent); vertical-align: -2px; }
+
+  .repo { font-weight: 600; }
+  .repo .path { font-weight: 400; color: var(--text-faint); }
+
+  .dot {
+    display: inline-block; width: 7px; height: 7px;
+    margin-right: 6px; vertical-align: 0;
+    border-radius: 1px;
+    background: var(--idle);
+  }
+  .s-ok   .dot { background: var(--ok); }
+  .s-dev  .dot { background: var(--accent); }
+  .s-warn .dot { background: var(--warn); }
+  .s-crit .dot { background: var(--crit); }
+
+  .muted { color: var(--text-faint); }
+  .flag-stale { color: var(--warn); font-weight: 700; }
+  .flag-off { color: var(--text-faint); }
+
+  /* ---------- status bar ---------- */
+
+  .status {
+    grid-area: status;
+    display: flex; align-items: center; gap: 0;
+    padding: 0 9px;
+    background: var(--chrome-hi);
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 11.5px;
+  }
+  .status > span { padding: 0 9px; border-right: 1px solid var(--border); }
+  .status > span:first-child { padding-left: 0; }
+  .status > span:last-child { border-right: 0; }
+  .status .legend { color: var(--text-faint); }
+  .status b { font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-grid" viewBox="0 0 16 16"><rect x="2" y="2" width="5" height="5"/><rect x="9" y="2" width="5" height="5"/><rect x="2" y="9" width="5" height="5"/><rect x="9" y="9" width="5" height="5"/></symbol>
+    <symbol id="i-repo" viewBox="0 0 16 16"><path d="M2 4.6 8 2l6 2.6v6.8L8 14l-6-2.6z"/><path d="M2 4.6 8 7.2l6-2.6M8 7.2V14"/></symbol>
+    <symbol id="i-users" viewBox="0 0 16 16"><circle cx="6" cy="5.4" r="2.4"/><path d="M1.6 13.6c0-2.4 2-3.9 4.4-3.9s4.4 1.5 4.4 3.9"/><path d="M11 3.3a2.4 2.4 0 0 1 0 4.2M12 9.9c1.6.5 2.4 1.8 2.4 3.7"/></symbol>
+    <symbol id="i-branch" viewBox="0 0 16 16"><circle cx="4.2" cy="3.4" r="1.7"/><circle cx="4.2" cy="12.6" r="1.7"/><circle cx="11.8" cy="3.4" r="1.7"/><path d="M4.2 5.1v5.8M11.8 5.1v1.2c0 2.1-1.6 3.1-4.1 3.4"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 16 16"><path d="M2.2 2.2h5.3L14 8.7 8.7 14 2.2 7.5z"/><circle cx="5.1" cy="5.1" r=".9"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 16 16"><path d="M4 14.2V2.2"/><path d="M4 3h8.2l-1.9 2.8 1.9 2.8H4z"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.3"/><path d="M8 1.6v2.1M8 12.3v2.1M1.6 8h2.1M12.3 8h2.1M3.5 3.5l1.5 1.5M11 11l1.5 1.5M12.5 3.5 11 5M5 11l-1.5 1.5"/></symbol>
+    <symbol id="i-log" viewBox="0 0 16 16"><path d="M5.2 4h9M5.2 8h9M5.2 12h9M2.4 4h.01M2.4 8h.01M2.4 12h.01"/></symbol>
+    <symbol id="i-info" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.8"/><path d="M8 7.4v4M8 4.9h.01"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 16 16"><path d="M13.4 8A5.4 5.4 0 1 1 11.6 4"/><path d="M13.7 1.6v3.1h-3.1"/></symbol>
+    <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.4"/><path d="m10.5 10.5 3.4 3.4"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 16 16"><path d="M3.6 1.6h5.9L12.4 5v9.4h-8.8z"/><path d="M9.5 1.6V5h2.9"/></symbol>
+    <symbol id="i-swap" viewBox="0 0 16 16"><path d="M2.4 5.4h9.2M9.1 3l2.5 2.4L9.1 7.9"/><path d="M13.6 10.6H4.4M6.9 8.1 4.4 10.6l2.5 2.4"/></symbol>
+    <symbol id="i-hide" viewBox="0 0 16 16"><path d="M1.8 8S4.4 4.2 8 4.2 14.2 8 14.2 8 11.6 11.8 8 11.8 1.8 8 1.8 8z"/><path d="M2.2 13.8 13.8 2.2"/></symbol>
+    <symbol id="i-ext" viewBox="0 0 16 16"><path d="M9.2 2.4h4.4v4.4"/><path d="M13.6 2.4 7.4 8.6"/><path d="M11.9 9.4v4.2H2.6V4.3h4.2"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 16 16"><path d="M6.2 3.6 10.6 8l-4.4 4.4"/></symbol>
+  </defs>
+</svg>
+
+<div class="app">
+
+  <header class="titlebar">
+    <div class="brand"><span class="mark"></span>git-nástěnka<span class="org">— Axima-Git</span></div>
+    <span class="sep"></span>
+    <div class="field">
+      <label for="win">Okno</label>
+      <select id="win">
+        <option>posledních 30 dní</option>
+        <option>posledních 90 dní</option>
+        <option>od 1. 1. 2026</option>
+        <option>celá historie</option>
+      </select>
+    </div>
+    <div class="search">
+      <svg class="icon icon-sm"><use href="#i-search"/></svg>
+      <input id="filter" type="search" placeholder="Filtr repozitářů, autorů…" autocomplete="off">
+    </div>
+    <span class="spacer"></span>
+    <span class="chip"><svg class="icon icon-sm"><use href="#i-refresh"/></svg>Synchronizace před 6 min</span>
+  </header>
+
+  <nav class="nav">
+    <button class="navitem" type="button"><svg class="icon"><use href="#i-grid"/></svg>Přehled</button>
+    <button class="navitem" type="button" aria-current="true"><svg class="icon"><use href="#i-repo"/></svg>Repozitáře</button>
+    <button class="navitem" type="button"><svg class="icon"><use href="#i-users"/></svg>Autoři</button>
+    <button class="navitem" type="button"><svg class="icon"><use href="#i-branch"/></svg>Aktivita</button>
+    <button class="navitem" type="button"><svg class="icon"><use href="#i-tag"/></svg>Štítky</button>
+    <button class="navitem" type="button"><svg class="icon"><use href="#i-flag"/></svg>Stavy projektů</button>
+
+    <div class="navgroup-label">Správa</div>
+    <button class="navitem" type="button" id="nav-settings" aria-expanded="false" aria-controls="fly-settings">
+      <svg class="icon"><use href="#i-gear"/></svg>Nastavení
+      <svg class="icon icon-sm chev"><use href="#i-chev"/></svg>
+    </button>
+    <button class="navitem" type="button"><svg class="icon"><use href="#i-log"/></svg>Log synchronizace</button>
+    <button class="navitem" type="button"><svg class="icon"><use href="#i-info"/></svg>O aplikaci</button>
+
+    <div class="flyout" id="fly-settings" role="menu">
+      <button type="button" role="menuitem">Zdroje dat</button>
+      <button type="button" role="menuitem">Uživatelé a role</button>
+      <button type="button" role="menuitem">Synchronizace</button>
+      <button type="button" role="menuitem">Přístupové tokeny</button>
+      <button type="button" role="menuitem">Mapování stavů</button>
+      <button type="button" role="menuitem">Export</button>
+      <button type="button" role="menuitem">Pravidla zastarání</button>
+      <button type="button" role="menuitem">Databáze</button>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="panehead">
+      <svg class="icon icon-sm"><use href="#i-repo"/></svg>Repozitáře
+      <span class="count" id="paneCount">14 položek</span>
+    </div>
+
+    <div class="toolbar">
+      <button class="tbtn primary" type="button"><svg class="icon icon-sm"><use href="#i-refresh"/></svg>Načíst z GitHubu</button>
+      <span class="sep"></span>
+      <button class="tbtn" type="button" data-needs-sel disabled><svg class="icon icon-sm"><use href="#i-doc"/></svg>Detail</button>
+      <button class="tbtn" type="button" data-needs-sel disabled><svg class="icon icon-sm"><use href="#i-swap"/></svg>Změnit stav</button>
+      <button class="tbtn" type="button" data-needs-sel disabled><svg class="icon icon-sm"><use href="#i-hide"/></svg>Vyřadit ze sledování</button>
+      <span class="sep"></span>
+      <button class="tbtn" type="button" data-needs-sel disabled><svg class="icon icon-sm"><use href="#i-ext"/></svg>Otevřít na GitHubu</button>
+    </div>
+
+    <div class="gridwrap">
+      <table id="grid">
+        <thead>
+          <tr>
+            <th class="col-check"><input type="checkbox" id="selAll" aria-label="Vybrat vše"></th>
+            <th class="col-flag" title="Příznaky">&nbsp;</th>
+            <th data-sort="text"   data-col="2">Repozitář <span class="arrow">▲</span></th>
+            <th data-sort="text"   data-col="3">Viditelnost <span class="arrow">▲</span></th>
+            <th data-sort="text"   data-col="4">Jazyk <span class="arrow">▲</span></th>
+            <th data-sort="text"   data-col="5">Autoři v okně <span class="arrow">▲</span></th>
+            <th data-sort="num"    data-col="6" class="col-num">Commitů <span class="arrow">▲</span></th>
+            <th data-sort="text"   data-col="7" class="col-time">Poslední commit <span class="arrow">▲</span></th>
+            <th data-sort="text"   data-col="8">Stav <span class="arrow">▲</span></th>
+            <th data-sort="text"   data-col="9">Správce <span class="arrow">▲</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="col-check"><input type="checkbox" aria-label="Vybrat řádek"></td><td class="col-flag"></td>
+            <td class="repo">ITDashboard</td><td class="muted">private</td><td>TypeScript</td><td>mtrnka, kolega1</td>
+            <td class="col-num">84</td><td class="col-time">2026-08-13 16:42</td>
+            <td class="s-ok"><span class="dot"></span>Aktivní</td><td>mtrnka</td></tr>
+
+          <tr><td class="col-check"><input type="checkbox" aria-label="Vybrat řádek"></td><td class="col-flag"></td>
+            <td class="repo">USBGuardian</td><td class="muted">private</td><td>C#</td><td>mtrnka</td>
+            <td class="col-num">37</td><td class="col-time">2026-08-11 09:18</td>
+            <td class="s-ok"><span class="dot"></span>Aktivní</td><td>mtrnka</td></tr>
+
+          <tr><td class="col-check"><input type="checkbox" aria-label="Vybrat řádek"></td><td class="col-flag"></td>
+            <td class="repo">git-nastenka</td><td class="muted">private</td><td>TypeScript</td><td>mtrnka</td>
+            <td class="col-num">28</td><td class="col-time">2026-08-14 09:12</td>
+            <td class="s-dev"><span class="dot"></span>Ve vývoji</td><td>mtrnka</td></tr>
+
+          <tr><td class="col-check"><input type="checkbox" aria-label="Vybrat řádek"></td><td class="col-flag"></td>
+            <td class="repo">LLM<span class="path"> / znalostni-asistent</span></td><td class="muted">private</td><td>Python</td><td>kolega2, mtrnka</td>
+            <td class="col-num">41</td><td class="col-time">2026-08-13 10:22</td>
+            <td class="s-ok"><span class="dot"></span>Aktivní</td><td>kolega2</td></tr>
+
+          <tr><td class="col-check"><input type="checkbox" aria-label="Vybrat řádek"></td><td class="col-flag"></td>
+            <td class="repo">BC_Telemetry</td><td class="muted">private</td><td>PowerShell</td><td>mtrnka, kolega2</td>
+            <td class="col-num">22</td><td class="col-time">2026-08-08 11:05</td>
+            <td class="s-ok"><span class="dot"></span>Aktivní</td><td>mtrnka</td></tr>
+
+          <tr><td class="col-check"><input type="checkbox" aria-label="Vybrat řádek"></td><td class="col-flag"></td>
+            <td class="repo">vyrobni-dokumentace</td><td class="muted">private</td><td>TypeScript</td><td>kolega1</td>
+            <td class="col-num">15</td><td class="col-time">2026-08-12 07:51</td>
+            <td class="s-ok"><span class="dot"></span>Aktivní</td><td>kolega1</td></tr>
+
+          <tr><td class="col-check"><input type="checkbox" aria-label="Vybrat řádek"></td><td class="col-flag"></td>
+            <td class="repo">axima-ui-standard</td><td class="muted">private</td><td>HTML</td><td>mtrnka</td>
+            <td class="col-num">11</td><td class="col-time">2026-08-14 08:36</td>
+            <td class="s-ok"><span class="dot"></span>Aktivní</td><td>mtrnka</td></tr>
+
+          <tr><td class="col-check"><input type="checkbox" aria-label="Vybrat řádek"></td><td class="col-flag"></td>
+            <td class="repo">SQL-udrzba</td><td class="muted">private</td><td>T-SQL</td><td>mtrnka</td>
+            <td class="col-num">9</td><td class="col-time">2026-08-05 08:14</td>
+            <td class="s-ok"><span class="dot"></span>Aktivní</td><td>mtrnka</td></tr>
+
+          <tr><td class="col-check"><input type="checkbox" aria-label="Vybrat řádek"></td><td class="col-flag"></td>
+            <td class="repo">podepisovani-scriptu</td><td class="muted">private</td><td>C#</td><td>mtrnka</td>
+            <td class="col-num">6</td><td class="col-time">2026-07-29 15:40</td>
+            <td class="s-warn"><span class="dot"></span>Údržba</td><td>mtrnka</td></tr>
+
+          <tr><td class="col-check"><input type="checkbox" aria-label="Vybrat řádek"></td><td class="col-flag"></td>
+            <td class="repo">git-mirror</td><td class="muted">private</td><td>PowerShell</td><td>mtrnka</td>
+            <td class="col-num">3</td><td class="col-time">2026-06-18 19:03</td>
+            <td class="s-ok"><span class="dot"></span>Aktivní</td><td>mtrnka</td></tr>
+
+          <tr><td class="col-check"><input type="checkbox" aria-label="Vybrat řádek"></td><td class="col-flag"></td>
+            <td class="repo">project-standard</td><td class="muted">private</td><td>PowerShell</td><td>mtrnka</td>
+            <td class="col-num">2</td><td class="col-time">2026-05-21 12:55</td>
+            <td class="s-ok"><span class="dot"></span>Aktivní</td><td>mtrnka</td></tr>
+
+          <tr><td class="col-check"><input type="checkbox" aria-label="Vybrat řádek"></td><td class="col-flag"><span class="flag-stale" title="Bez commitu déle než 90 dní">!</span></td>
+            <td class="repo">MxM365Monitor</td><td>public</td><td>PowerShell</td><td class="muted">—</td>
+            <td class="col-num">0</td><td class="col-time">2026-03-02 13:27</td>
+            <td class="s-warn"><span class="dot"></span>Údržba</td><td>mtrnka</td></tr>
+
+          <tr><td class="col-check"><input type="checkbox" aria-label="Vybrat řádek"></td><td class="col-flag"><span class="flag-stale" title="Bez commitu déle než 90 dní">!</span></td>
+            <td class="repo">nav-integrace</td><td class="muted">private</td><td>AL</td><td class="muted">—</td>
+            <td class="col-num">0</td><td class="col-time">2025-11-14 16:20</td>
+            <td class="s-crit"><span class="dot"></span>Archiv</td><td>kolega3</td></tr>
+
+          <tr><td class="col-check"><input type="checkbox" aria-label="Vybrat řádek"></td><td class="col-flag"><span class="flag-stale" title="Bez commitu déle než 90 dní">!</span><span class="flag-off" title="Vyřazeno ze sledování">X</span></td>
+            <td class="repo">intranet-legacy</td><td class="muted">private</td><td>PHP</td><td class="muted">—</td>
+            <td class="col-num">0</td><td class="col-time">2024-09-03 10:41</td>
+            <td class="s-crit"><span class="dot"></span>Opuštěno</td><td class="muted">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer class="status">
+    <span><b id="stTotal">14</b> repozitářů</span>
+    <span><b id="stSel">0</b> vybráno</span>
+    <span>Okno: <b>30 dní</b> · <b>258</b> commitů · <b>4</b> autoři</span>
+    <span class="legend"><b>!</b> bez commitu &gt; 90 dní &nbsp; <b>X</b> vyřazeno ze sledování</span>
+    <span class="spacer"></span>
+    <span>PAT platný do 2026-11-02</span>
+    <span>Databáze připojena</span>
+  </footer>
+</div>
+
+<script>
+  (function () {
+    var grid = document.getElementById("grid");
+    var body = grid.tBodies[0];
+    var rows = Array.prototype.slice.call(body.rows);
+    var selAll = document.getElementById("selAll");
+    var stSel = document.getElementById("stSel");
+    var stTotal = document.getElementById("stTotal");
+    var paneCount = document.getElementById("paneCount");
+    var filter = document.getElementById("filter");
+    var flyout = document.getElementById("fly-settings");
+    var navSettings = document.getElementById("nav-settings");
+
+    function visibleRows() {
+      return rows.filter(function (r) { return r.style.display !== "none"; });
+    }
+
+    function refresh() {
+      var vis = visibleRows();
+      var sel = vis.filter(function (r) { return r.dataset.selected === "true"; });
+      stSel.textContent = sel.length;
+      stTotal.textContent = vis.length;
+      paneCount.textContent = vis.length + (vis.length === 1 ? " položka" : (vis.length < 5 ? " položky" : " položek"));
+      document.querySelectorAll("[data-needs-sel]").forEach(function (b) { b.disabled = sel.length === 0; });
+      selAll.checked = vis.length > 0 && sel.length === vis.length;
+      selAll.indeterminate = sel.length > 0 && sel.length < vis.length;
+    }
+
+    function setSelected(row, on) {
+      row.dataset.selected = on ? "true" : "false";
+      row.cells[0].querySelector("input").checked = on;
+    }
+
+    body.addEventListener("click", function (e) {
+      var row = e.target.closest("tr");
+      if (!row) return;
+      if (e.target.type === "checkbox") {
+        setSelected(row, e.target.checked);
+      } else if (e.ctrlKey || e.metaKey) {
+        setSelected(row, row.dataset.selected !== "true");
+      } else {
+        rows.forEach(function (r) { setSelected(r, false); });
+        setSelected(row, true);
+      }
+      refresh();
+    });
+
+    selAll.addEventListener("change", function () {
+      visibleRows().forEach(function (r) { setSelected(r, selAll.checked); });
+      refresh();
+    });
+
+    // sorting
+    grid.tHead.addEventListener("click", function (e) {
+      var th = e.target.closest("th[data-sort]");
+      if (!th) return;
+      var col = +th.dataset.col;
+      var numeric = th.dataset.sort === "num";
+      var dir = th.getAttribute("aria-sort") === "ascending" ? -1 : 1;
+      grid.tHead.querySelectorAll("th").forEach(function (h) { h.removeAttribute("aria-sort"); });
+      th.setAttribute("aria-sort", dir === 1 ? "ascending" : "descending");
+      rows.sort(function (a, b) {
+        var x = a.cells[col].textContent.trim();
+        var y = b.cells[col].textContent.trim();
+        if (numeric) return (parseFloat(x) - parseFloat(y)) * dir;
+        return x.localeCompare(y, "cs") * dir;
+      });
+      rows.forEach(function (r) { body.appendChild(r); });
+    });
+
+    filter.addEventListener("input", function () {
+      var q = filter.value.trim().toLowerCase();
+      rows.forEach(function (r) {
+        var hit = !q || r.textContent.toLowerCase().indexOf(q) !== -1;
+        r.style.display = hit ? "" : "none";
+        if (!hit) setSelected(r, false);
+      });
+      refresh();
+    });
+
+    // flyout submenu
+    navSettings.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var open = flyout.dataset.open === "true";
+      flyout.dataset.open = open ? "false" : "true";
+      navSettings.setAttribute("aria-expanded", open ? "false" : "true");
+      flyout.style.top = (navSettings.offsetTop - 4) + "px";
+    });
+    document.addEventListener("click", function () {
+      flyout.dataset.open = "false";
+      navSettings.setAttribute("aria-expanded", "false");
+    });
+    flyout.addEventListener("click", function (e) { e.stopPropagation(); });
+
+    // single-select nav
+    document.querySelectorAll(".navitem").forEach(function (item) {
+      item.addEventListener("click", function () {
+        if (item === navSettings) return;
+        document.querySelectorAll(".navitem").forEach(function (i) { i.removeAttribute("aria-current"); });
+        item.setAttribute("aria-current", "true");
+      });
+    });
+
+    refresh();
+  })();
+</script>
+</body>
+</html>
+
