@@ -3,30 +3,33 @@
 Návrh vzhledu rozhraní pro interní správcovské aplikace — hustý „IT-ops" layout
 inspirovaný MikroTik WinBoxem, místo vzdušných Material/Bootstrap šablon.
 
-Repozitář je **záznam rozhodnutí**, ne knihovna. Obsahuje funkční mockup
+Repozitář je **záznam rozhodnutí**, ne knihovna. Obsahuje funkční mockupy
 a rozbor, kdy se vyplatí sáhnout po komponentové knihovně a kdy ne.
 
 ## Obsah
 
 | Cesta | Co to je |
 |---|---|
-| [`mockup/git-nastenka-shell.html`](mockup/git-nastenka-shell.html) | Funkční mockup, jeden soubor, bez závislostí a bez build kroku. Otevři v prohlížeči. |
+| [`mockup/ui-styly-katalog.html`](mockup/ui-styly-katalog.html) | **Katalog 14 vizuálních stylů.** Táž aplikace, přepínatelný styl, světelný režim a obrazovka (tabulka / grafy). Začni tady. |
+| [`mockup/git-nastenka-shell.html`](mockup/git-nastenka-shell.html) | Původní mockup kostry — sidebar, toolbar, hustý grid, stavový řádek. |
+| [`docs/styly.md`](docs/styly.md) | Popis všech stylů, jak jsou postavené, pravidla pro grafy a barvy dat. |
 | [`docs/rozhovor.md`](docs/rozhovor.md) | Průběh návrhu: zadání, zvažované varianty, rozbor React + MUI, doporučení. |
 
-## Mockup
+Obojí jsou samostatné soubory bez závislostí a bez build kroku — otevři je
+v prohlížeči, nebo je naservíruj jak jsou.
 
-Kostra o čtyřech pásmech: titulní lišta → boční menu s rozbalovacím flyoutem →
-toolbar → hustý grid → stavový řádek.
+## K čemu to je
 
-Živé je v něm: výběr řádků (Ctrl+klik = vícenásobný), třídění klikem na hlavičku
-sloupce, textový filtr, flyout podmenu a toolbar tlačítka, která jsou neaktivní,
-dokud není nic vybráno. Světlý i tmavý režim podle nastavení systému.
+Vybrat jeden styl, zapsat jeho slug do zakládaného projektu jako `ui.style`
+a mít od začátku jasno, jak bude aplikace vypadat — místo aby se vzhled
+dolaďoval dodatečně u každé zvlášť.
 
-Ukázková data jsou smyšlená.
+Styly jsou pojmenované (`ops-steel`, `carbon-grid`, `ledger-mono`, …), takže
+volba je zapsatelná a přenositelná. Přehled je v [`docs/styly.md`](docs/styly.md).
 
 ## Vizuální pravidla
 
-Konkrétní rozhodnutí, ze kterých ten vzhled plyne:
+Konkrétní rozhodnutí za výchozím stylem `ops-steel`:
 
 - **Hustota** — řádek 26 px, písmo 12,5 px v UI a 12 px v tabulce.
 - **Nativní font** — `Segoe UI Variable Text`, ne webfont. Aplikace má vypadat
@@ -41,7 +44,13 @@ Konkrétní rozhodnutí, ze kterých ten vzhled plyne:
   s `tabular-nums`, aby lícovaly.
 - **Žádná emoji**, žádné gradienty, žádné karty se zaoblenými rohy.
 
+Barvy dat se řídí vlastními pravidly a jsou na stylu **nezávislé** — viz
+[`docs/styly.md`](docs/styly.md#barvy-dat--barvy-rozhraní).
+
 ## Použití
 
-Otevři mockup v prohlížeči. Tokeny i markup jsou určené ke zkopírování do
-konkrétní aplikace — začni blokem `:root` v `<style>`, tam je celá paleta.
+Otevři katalog v prohlížeči a projdi styly. Tokeny i markup jsou určené
+ke zkopírování do konkrétní aplikace — začni blokem odpovídajícího stylu
+v `<style>`, tam je celá paleta i rozměry.
+
+Ukázková data ve všech mockupech jsou smyšlená.

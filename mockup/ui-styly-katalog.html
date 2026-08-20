@@ -1,0 +1,1723 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Volba vizuálního stylu — katalog</title>
+
+<style>
+  /* ==========================================================================
+     1. CHROME GALERIE — nezávislé na vybraném stylu
+     ========================================================================== */
+
+  :root {
+    --g-bg:      #eef0f3;
+    --g-panel:   #ffffff;
+    --g-sunk:    #e4e7eb;
+    --g-border:  #d3d8dd;
+    --g-text:    #16191c;
+    --g-dim:     #59616a;
+    --g-faint:   #8b939b;
+    --g-accent:  #31628c;
+    --g-ui: "Segoe UI Variable Text", "Segoe UI", -apple-system, system-ui, sans-serif;
+    --g-mono: "Cascadia Mono", Consolas, "SF Mono", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --g-bg:     #101317;
+      --g-panel:  #1a1e22;
+      --g-sunk:   #14171b;
+      --g-border: #2b3138;
+      --g-text:   #e3e7ea;
+      --g-dim:    #949ca5;
+      --g-faint:  #6d757e;
+      --g-accent: #7aa8d4;
+    }
+  }
+  :root[data-theme="light"] {
+    --g-bg: #eef0f3; --g-panel: #ffffff; --g-sunk: #e4e7eb; --g-border: #d3d8dd;
+    --g-text: #16191c; --g-dim: #59616a; --g-faint: #8b939b; --g-accent: #31628c;
+  }
+  :root[data-theme="dark"] {
+    --g-bg: #101317; --g-panel: #1a1e22; --g-sunk: #14171b; --g-border: #2b3138;
+    --g-text: #e3e7ea; --g-dim: #949ca5; --g-faint: #6d757e; --g-accent: #7aa8d4;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 20px 22px 40px;
+    background: var(--g-bg);
+    color: var(--g-text);
+    font-family: var(--g-ui);
+    font-size: 13.5px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1360px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+
+  .masthead h1 {
+    margin: 0 0 4px;
+    font-size: 19px;
+    font-weight: 650;
+    letter-spacing: -.15px;
+    text-wrap: balance;
+  }
+  .masthead p { margin: 0; color: var(--g-dim); max-width: 66ch; }
+  .masthead code {
+    font-family: var(--g-mono); font-size: .92em;
+    background: var(--g-sunk); border: 1px solid var(--g-border);
+    border-radius: 2px; padding: 0 4px;
+  }
+
+  /* --- panel s přepínači --- */
+
+  .controls {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    padding: 10px;
+    background: var(--g-panel);
+    border: 1px solid var(--g-border);
+    border-radius: 3px;
+  }
+
+  .styletabs { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .styletab {
+    display: flex; align-items: center; gap: 7px;
+    padding: 6px 11px 6px 8px;
+    border: 1px solid var(--g-border);
+    border-radius: 3px;
+    background: var(--g-panel);
+    color: var(--g-text);
+    font: inherit; font-size: 12.5px;
+    cursor: pointer;
+  }
+  .styletab:hover { background: var(--g-sunk); }
+  .styletab[aria-pressed="true"] {
+    border-color: var(--g-accent);
+    box-shadow: inset 0 0 0 1px var(--g-accent);
+    font-weight: 600;
+  }
+  .styletab .sw {
+    display: flex; width: 26px; height: 15px; flex: none;
+    border: 1px solid rgba(128,128,128,.45); border-radius: 2px; overflow: hidden;
+  }
+  .styletab .sw i { flex: 1; }
+
+  .grow { flex: 1; }
+
+  .themeswitch { display: flex; border: 1px solid var(--g-border); border-radius: 3px; overflow: hidden; }
+  .themeswitch button {
+    padding: 6px 10px; border: 0; background: var(--g-panel);
+    color: var(--g-dim); font: inherit; font-size: 12px; cursor: pointer;
+  }
+  .themeswitch button + button { border-left: 1px solid var(--g-border); }
+  .themeswitch button[aria-pressed="true"] { background: var(--g-accent); color: #fff; font-weight: 600; }
+
+  /* --- identifikační karta --- */
+
+  .idcard {
+    display: grid;
+    grid-template-columns: minmax(260px, 1.4fr) minmax(240px, 1fr);
+    gap: 0;
+    background: var(--g-panel);
+    border: 1px solid var(--g-border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .idcard .about { padding: 13px 15px; }
+  .idcard .specs {
+    padding: 13px 15px;
+    background: var(--g-sunk);
+    border-left: 1px solid var(--g-border);
+  }
+  @media (max-width: 820px) {
+    .idcard { grid-template-columns: 1fr; }
+    .idcard .specs { border-left: 0; border-top: 1px solid var(--g-border); }
+  }
+
+  .slug {
+    display: inline-block;
+    font-family: var(--g-mono); font-size: 12.5px; font-weight: 600;
+    color: var(--g-accent);
+    border: 1px solid var(--g-border);
+    border-radius: 2px;
+    padding: 1px 6px;
+    margin-bottom: 7px;
+  }
+  .idcard h2 { margin: 0 0 5px; font-size: 15.5px; font-weight: 650; }
+  .idcard .lede { margin: 0 0 9px; color: var(--g-dim); }
+  .idcard .caution {
+    margin: 0 0 7px;
+    padding: 4px 9px;
+    border-left: 3px solid #b8860b;
+    background: rgba(184, 134, 11, .1);
+    font-size: 12.5px;
+  }
+  .idcard .caution[hidden] { display: none; }
+  .idcard .use { margin: 0; font-size: 12.5px; }
+  .idcard .use b { font-weight: 650; }
+
+  .swatches { display: flex; gap: 5px; margin: 10px 0 0; }
+  .swatches figure { margin: 0; flex: 1; min-width: 0; }
+  .swatches .chip { height: 26px; border: 1px solid rgba(128,128,128,.4); border-radius: 2px; }
+  .swatches figcaption {
+    font-family: var(--g-mono); font-size: 9.5px; color: var(--g-faint);
+    margin-top: 3px; text-align: center; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+
+  .spectable { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .spectable th {
+    text-align: left; font-weight: 500; color: var(--g-dim);
+    padding: 3px 10px 3px 0; white-space: nowrap; vertical-align: top;
+  }
+  .spectable td { padding: 3px 0; font-family: var(--g-mono); font-size: 11.5px; }
+
+  /* --- rám náhledu --- */
+
+  .frame {
+    border: 1px solid var(--g-border);
+    border-radius: 3px;
+    overflow: hidden;
+    background: var(--g-panel);
+  }
+  .framebar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 10px;
+    background: var(--g-sunk);
+    border-bottom: 1px solid var(--g-border);
+    font-size: 11.5px; color: var(--g-dim);
+  }
+  .framebar .dot3 { display: flex; gap: 4px; }
+  .framebar .dot3 i { width: 8px; height: 8px; border-radius: 50%; background: var(--g-border); }
+
+  .note {
+    color: var(--g-faint); font-size: 12px; margin: 0;
+  }
+
+  :focus-visible { outline: 2px solid var(--g-accent); outline-offset: 1px; }
+
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+
+  /* ==========================================================================
+     2. TOKENY STYLŮ
+     Každý styl definuje světlou (--l-*) i tmavou (--d-*) sadu.
+     Mapování na aktivní sadu je až v bloku 3.
+     ========================================================================== */
+
+  /* ---- ops-steel : správcovská konzole ---- */
+  .preview[data-style="ops-steel"] {
+    --l-pane:#ffffff; --l-chrome:#edeff2; --l-chromehi:#f6f7f9; --l-head:#e3e7eb;
+    --l-zebra:#f8f9fb; --l-hover:#e6eaee; --l-border:#c9cfd6; --l-bordersoft:#dde1e6;
+    --l-text:#1a1e22; --l-dim:#5c656e; --l-faint:#8b939b;
+    --l-accent:#31628c; --l-accsoft:rgba(49,98,140,.14); --l-accfg:#ffffff;
+    --l-ok:#3d7f4c; --l-warn:#96700d; --l-crit:#a93b31;
+
+    --d-pane:#1f2226; --d-chrome:#191b1e; --d-chromehi:#212429; --d-head:#262a2f;
+    --d-zebra:#23262b; --d-hover:#2b3036; --d-border:#32373d; --d-bordersoft:#2a2e34;
+    --d-text:#dde2e7; --d-dim:#8a939c; --d-faint:#6b747d;
+    --d-accent:#6a9cce; --d-accsoft:rgba(106,156,206,.18); --d-accfg:#10151a;
+    --d-ok:#63ac72; --d-warn:#c79a33; --d-crit:#dc6b60;
+
+    --radius:2px; --nav-radius:0px; --sel-bar:2px;
+    --row-h:26px; --title-h:33px; --tb-h:30px; --panehead-h:26px; --status-h:23px;
+    --font-ui:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
+    --font-display:var(--font-ui);
+    --font-data:"Cascadia Mono",Consolas,monospace;
+    --fs-ui:12.5px; --fs-data:11.5px; --fs-th:11.5px;
+    --th-transform:none; --th-ls:0; --th-weight:600;
+    --nav-h:27px; --pane-shadow:none; --dot-radius:1px;
+  }
+
+  /* ---- carbon-grid : enterprise datová mřížka ---- */
+  .preview[data-style="carbon-grid"] {
+    --l-pane:#ffffff; --l-chrome:#f4f4f4; --l-chromehi:#ffffff; --l-head:#f4f4f4;
+    --l-zebra:#ffffff; --l-hover:#e8e8e8; --l-border:#e0e0e0; --l-bordersoft:#e0e0e0;
+    --l-text:#161616; --l-dim:#525252; --l-faint:#8d8d8d;
+    --l-accent:#0f62fe; --l-accsoft:#edf5ff; --l-accfg:#ffffff;
+    --l-ok:#198038; --l-warn:#8e6a00; --l-crit:#da1e28;
+
+    --d-pane:#262626; --d-chrome:#161616; --d-chromehi:#262626; --d-head:#393939;
+    --d-zebra:#262626; --d-hover:#353535; --d-border:#393939; --d-bordersoft:#393939;
+    --d-text:#f4f4f4; --d-dim:#c6c6c6; --d-faint:#8d8d8d;
+    --d-accent:#4589ff; --d-accsoft:#0043ce; --d-accfg:#ffffff;
+    --d-ok:#42be65; --d-warn:#d2a106; --d-crit:#fa4d56;
+
+    --radius:0px; --nav-radius:0px; --sel-bar:3px;
+    --row-h:32px; --title-h:40px; --tb-h:36px; --panehead-h:32px; --status-h:26px;
+    --font-ui:"Segoe UI","Helvetica Neue",system-ui,sans-serif;
+    --font-display:var(--font-ui);
+    --font-data:Consolas,"Cascadia Mono",monospace;
+    --fs-ui:13.5px; --fs-data:13px; --fs-th:12px;
+    --th-transform:none; --th-ls:.16px; --th-weight:600;
+    --nav-h:32px; --pane-shadow:none; --dot-radius:0px;
+  }
+
+  /* ---- fluent-win : nativní Windows aplikace ---- */
+  .preview[data-style="fluent-win"] {
+    --l-pane:#ffffff; --l-chrome:#f3f3f3; --l-chromehi:#fbfbfb; --l-head:#f9f9f9;
+    --l-zebra:#ffffff; --l-hover:#f0f0f0; --l-border:#e5e5e5; --l-bordersoft:#ededed;
+    --l-text:#1b1b1b; --l-dim:#616161; --l-faint:#8a8a8a;
+    --l-accent:#0067c0; --l-accsoft:#eff6fc; --l-accfg:#ffffff;
+    --l-ok:#0f7b0f; --l-warn:#9d5d00; --l-crit:#c42b1c;
+
+    --d-pane:#2b2b2b; --d-chrome:#202020; --d-chromehi:#272727; --d-head:#2f2f2f;
+    --d-zebra:#2b2b2b; --d-hover:#383838; --d-border:#3d3d3d; --d-bordersoft:#363636;
+    --d-text:#f7f7f7; --d-dim:#c5c5c5; --d-faint:#9a9a9a;
+    --d-accent:#4cc2ff; --d-accsoft:#17313f; --d-accfg:#10151a;
+    --d-ok:#6ccb5f; --d-warn:#d8a800; --d-crit:#ff99a4;
+
+    --radius:5px; --nav-radius:4px; --sel-bar:3px;
+    --row-h:32px; --title-h:40px; --tb-h:38px; --panehead-h:32px; --status-h:26px;
+    --font-ui:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
+    --font-display:"Segoe UI Variable Display","Segoe UI",system-ui,sans-serif;
+    --font-data:Consolas,"Cascadia Mono",monospace;
+    --fs-ui:13px; --fs-data:12.5px; --fs-th:12.5px;
+    --th-transform:none; --th-ls:0; --th-weight:600;
+    --nav-h:34px; --pane-shadow:0 1px 3px rgba(0,0,0,.09); --dot-radius:50%;
+  }
+
+  /* ---- console-dark : monitorovací konzole ---- */
+  .preview[data-style="console-dark"] {
+    --l-pane:#fbfbf9; --l-chrome:#f0efeb; --l-chromehi:#f6f5f2; --l-head:#e9e8e3;
+    --l-zebra:#f6f5f2; --l-hover:#eae9e4; --l-border:#d3d2cb; --l-bordersoft:#e0dfd9;
+    --l-text:#23282e; --l-dim:#5a6169; --l-faint:#8a9099;
+    --l-accent:#9a6412; --l-accsoft:rgba(154,100,18,.12); --l-accfg:#ffffff;
+    --l-ok:#2f7d4c; --l-warn:#9a6412; --l-crit:#a63a2e;
+
+    --d-pane:#14181d; --d-chrome:#0f1317; --d-chromehi:#171c22; --d-head:#1b2128;
+    --d-zebra:#171b21; --d-hover:#1f262e; --d-border:#262e37; --d-bordersoft:#1e252c;
+    --d-text:#ccd6e0; --d-dim:#8397a8; --d-faint:#5c6b7a;
+    --d-accent:#d08b2c; --d-accsoft:rgba(208,139,44,.15); --d-accfg:#0f1317;
+    --d-ok:#4fa86a; --d-warn:#d08b2c; --d-crit:#d05c50;
+
+    --radius:1px; --nav-radius:0px; --sel-bar:2px;
+    --row-h:24px; --title-h:30px; --tb-h:28px; --panehead-h:24px; --status-h:22px;
+    --font-ui:"Cascadia Mono",Consolas,"SF Mono",monospace;
+    --font-display:var(--font-ui);
+    --font-data:"Cascadia Mono",Consolas,monospace;
+    --fs-ui:12px; --fs-data:11.5px; --fs-th:11px;
+    --th-transform:uppercase; --th-ls:.7px; --th-weight:600;
+    --nav-h:24px; --pane-shadow:none; --dot-radius:0px;
+  }
+
+  /* ---- paper-doc : tiskový výkaz ---- */
+  .preview[data-style="paper-doc"] {
+    --l-pane:#ffffff; --l-chrome:#f7f6f3; --l-chromehi:#fdfcfa; --l-head:#f2f0ec;
+    --l-zebra:#ffffff; --l-hover:#f2f0ea; --l-border:#d9d5cc; --l-bordersoft:#e8e5de;
+    --l-text:#22201c; --l-dim:#5d574c; --l-faint:#8d8578;
+    --l-accent:#33604a; --l-accsoft:rgba(51,96,74,.10); --l-accfg:#ffffff;
+    --l-ok:#33604a; --l-warn:#8a6212; --l-crit:#8f3128;
+
+    --d-pane:#232220; --d-chrome:#1b1a18; --d-chromehi:#2a2825; --d-head:#2d2b27;
+    --d-zebra:#232220; --d-hover:#302e2a; --d-border:#3b3833; --d-bordersoft:#322f2b;
+    --d-text:#e6e2d9; --d-dim:#a29a8c; --d-faint:#7d7568;
+    --d-accent:#7fb097; --d-accsoft:rgba(127,176,151,.14); --d-accfg:#1b1a18;
+    --d-ok:#7fb097; --d-warn:#c9a24a; --d-crit:#d4796c;
+
+    --radius:0px; --nav-radius:0px; --sel-bar:2px;
+    --row-h:30px; --title-h:42px; --tb-h:34px; --panehead-h:34px; --status-h:26px;
+    --font-ui:"Segoe UI","Helvetica Neue",system-ui,sans-serif;
+    --font-display:Cambria,Constantia,Georgia,"Times New Roman",serif;
+    --font-data:Cambria,Georgia,"Times New Roman",serif;
+    --fs-ui:13.5px; --fs-data:13.5px; --fs-th:11.5px;
+    --th-transform:uppercase; --th-ls:.8px; --th-weight:600;
+    --nav-h:30px; --pane-shadow:none; --dot-radius:0px;
+  }
+
+  /* ---- ledger-mono : finanční terminál ---- */
+  .preview[data-style="ledger-mono"] {
+    --l-pane:#ffffff; --l-chrome:#f2f3f5; --l-chromehi:#f8f9fa; --l-head:#e9ebee;
+    --l-zebra:#fafbfc; --l-hover:#eceef1; --l-border:#cdd2d8; --l-bordersoft:#dfe3e7;
+    --l-text:#14171a; --l-dim:#59616a; --l-faint:#878f98;
+    --l-accent:#35678c; --l-accsoft:rgba(53,103,140,.12); --l-accfg:#ffffff;
+    --l-ok:#1f7a43; --l-warn:#8a6512; --l-crit:#a3392f;
+
+    --d-pane:#16181c; --d-chrome:#101216; --d-chromehi:#1a1d21; --d-head:#1e2126;
+    --d-zebra:#191c20; --d-hover:#23272c; --d-border:#2a2e34; --d-bordersoft:#212429;
+    --d-text:#d6dae0; --d-dim:#8b929b; --d-faint:#626973;
+    --d-accent:#5a8fb8; --d-accsoft:rgba(90,143,184,.15); --d-accfg:#101216;
+    --d-ok:#3fa860; --d-warn:#c99a3a; --d-crit:#cf5b52;
+
+    --radius:1px; --nav-radius:0px; --sel-bar:2px;
+    --row-h:22px; --title-h:28px; --tb-h:26px; --panehead-h:22px; --status-h:20px;
+    --font-ui:"Segoe UI","Helvetica Neue",system-ui,sans-serif;
+    --font-display:var(--font-ui);
+    --font-data:"Cascadia Mono",Consolas,monospace;
+    --fs-ui:11.5px; --fs-data:11.5px; --fs-th:10.5px;
+    --th-transform:uppercase; --th-ls:.6px; --th-weight:700;
+    --nav-h:22px; --pane-shadow:none; --dot-radius:0px;
+  }
+
+  /* ---- blueprint-dense : datový terminál (Palantir Blueprint) ---- */
+  .preview[data-style="blueprint-dense"] {
+    --l-pane:#ffffff; --l-chrome:#f6f7f9; --l-chromehi:#ffffff; --l-head:#f6f7f9;
+    --l-zebra:#ffffff; --l-hover:#edeff2; --l-border:#d3d8de; --l-bordersoft:#e1e5ea;
+    --l-text:#1c2127; --l-dim:#5f6b7c; --l-faint:#8f99a8;
+    --l-accent:#2d72d2; --l-accsoft:rgba(45,114,210,.12); --l-accfg:#ffffff;
+    --l-ok:#238551; --l-warn:#c87619; --l-crit:#cd4246;
+
+    --d-pane:#2f343c; --d-chrome:#252a31; --d-chromehi:#2f343c; --d-head:#383e47;
+    --d-zebra:#2f343c; --d-hover:#383e47; --d-border:#404854; --d-bordersoft:#383e47;
+    --d-text:#f6f7f9; --d-dim:#abb3bf; --d-faint:#8f99a8;
+    --d-accent:#4c90f0; --d-accsoft:rgba(76,144,240,.16); --d-accfg:#1c2127;
+    --d-ok:#32a467; --d-warn:#ec9a3c; --d-crit:#e76a6e;
+
+    --radius:2px; --nav-radius:2px; --sel-bar:3px;
+    --row-h:28px; --title-h:36px; --tb-h:32px; --panehead-h:28px; --status-h:24px;
+    --font-ui:"Segoe UI","Helvetica Neue",system-ui,sans-serif;
+    --font-display:var(--font-ui);
+    --font-data:"Cascadia Mono",Consolas,monospace;
+    --fs-ui:13px; --fs-data:12.5px; --fs-th:12px;
+    --th-transform:none; --th-ls:0; --th-weight:600;
+    --nav-h:29px; --pane-shadow:none; --dot-radius:50%;
+  }
+
+  /* ---- swiss-rule : švýcarská typografická mřížka ---- */
+  .preview[data-style="swiss-rule"] {
+    --l-pane:#ffffff; --l-chrome:#ffffff; --l-chromehi:#ffffff; --l-head:#ffffff;
+    --l-zebra:#ffffff; --l-hover:#f1f1f1; --l-border:#1a1a1a; --l-bordersoft:#d8d8d8;
+    --l-text:#111111; --l-dim:#555555; --l-faint:#8a8a8a;
+    --l-accent:#d42a20; --l-accsoft:rgba(212,42,32,.08); --l-accfg:#ffffff;
+    --l-ok:#1f6b3a; --l-warn:#8a6100; --l-crit:#d42a20;
+
+    --d-pane:#0d0d0d; --d-chrome:#0d0d0d; --d-chromehi:#0d0d0d; --d-head:#0d0d0d;
+    --d-zebra:#0d0d0d; --d-hover:#1e1e1e; --d-border:#d8d8d8; --d-bordersoft:#2c2c2c;
+    --d-text:#f0f0f0; --d-dim:#a8a8a8; --d-faint:#767676;
+    --d-accent:#ff4438; --d-accsoft:rgba(255,68,56,.14); --d-accfg:#0d0d0d;
+    --d-ok:#5cbd7e; --d-warn:#d6a437; --d-crit:#ff4438;
+
+    --radius:0px; --nav-radius:0px; --sel-bar:4px;
+    --row-h:28px; --title-h:40px; --tb-h:34px; --panehead-h:30px; --status-h:24px;
+    --font-ui:"Helvetica Neue",Arial,"Segoe UI",sans-serif;
+    --font-display:var(--font-ui);
+    --font-data:"Helvetica Neue",Arial,sans-serif;
+    --fs-ui:13px; --fs-data:12.5px; --fs-th:10.5px;
+    --th-transform:uppercase; --th-ls:1.1px; --th-weight:700;
+    --nav-h:28px; --pane-shadow:none; --dot-radius:0px;
+  }
+
+  /* ---- nord-calm : tlumená arktická paleta ---- */
+  .preview[data-style="nord-calm"] {
+    --l-pane:#ffffff; --l-chrome:#eceff4; --l-chromehi:#f4f6f9; --l-head:#e5e9f0;
+    --l-zebra:#f7f9fb; --l-hover:#e0e5ee; --l-border:#ccd3de; --l-bordersoft:#dfe4ec;
+    --l-text:#2e3440; --l-dim:#4c566a; --l-faint:#7b8494;
+    --l-accent:#5e81ac; --l-accsoft:rgba(94,129,172,.13); --l-accfg:#ffffff;
+    --l-ok:#4f7a3f; --l-warn:#97710f; --l-crit:#a4454e;
+
+    --d-pane:#2e3440; --d-chrome:#292e39; --d-chromehi:#323845; --d-head:#3b4252;
+    --d-zebra:#313743; --d-hover:#3b4252; --d-border:#434c5e; --d-bordersoft:#3a414f;
+    --d-text:#eceff4; --d-dim:#b8c1d1; --d-faint:#8b93a5;
+    --d-accent:#88c0d0; --d-accsoft:rgba(136,192,208,.14); --d-accfg:#2e3440;
+    --d-ok:#a3be8c; --d-warn:#ebcb8b; --d-crit:#bf616a;
+
+    --radius:3px; --nav-radius:3px; --sel-bar:3px;
+    --row-h:27px; --title-h:34px; --tb-h:31px; --panehead-h:27px; --status-h:23px;
+    --font-ui:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
+    --font-display:var(--font-ui);
+    --font-data:"Cascadia Mono",Consolas,monospace;
+    --fs-ui:12.5px; --fs-data:12px; --fs-th:11.5px;
+    --th-transform:none; --th-ls:.2px; --th-weight:600;
+    --nav-h:28px; --pane-shadow:none; --dot-radius:50%;
+  }
+
+  /* ---- zinc-mute : bez akcentní barvy ---- */
+  .preview[data-style="zinc-mute"] {
+    --l-pane:#ffffff; --l-chrome:#f4f4f5; --l-chromehi:#fafafa; --l-head:#ececee;
+    --l-zebra:#fafafa; --l-hover:#eaeaec; --l-border:#c8c8cc; --l-bordersoft:#e2e2e5;
+    --l-text:#18181b; --l-dim:#5a5a60; --l-faint:#8b8b92;
+    --l-accent:#3f3f46; --l-accsoft:rgba(63,63,70,.09); --l-accfg:#ffffff;
+    --l-ok:#3f7d4f; --l-warn:#8a6a12; --l-crit:#b03a2e;
+
+    --d-pane:#1c1c1f; --d-chrome:#161618; --d-chromehi:#202023; --d-head:#26262a;
+    --d-zebra:#202023; --d-hover:#2a2a2e; --d-border:#35353a; --d-bordersoft:#2b2b30;
+    --d-text:#e4e4e7; --d-dim:#a1a1aa; --d-faint:#71717a;
+    --d-accent:#d4d4d8; --d-accsoft:rgba(212,212,216,.12); --d-accfg:#18181b;
+    --d-ok:#6cb37d; --d-warn:#c9a24a; --d-crit:#e0736a;
+
+    --radius:2px; --nav-radius:2px; --sel-bar:3px;
+    --row-h:26px; --title-h:33px; --tb-h:30px; --panehead-h:26px; --status-h:23px;
+    --font-ui:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
+    --font-display:var(--font-ui);
+    --font-data:"Cascadia Mono",Consolas,monospace;
+    --fs-ui:12.5px; --fs-data:11.5px; --fs-th:11.5px;
+    --th-transform:none; --th-ls:0; --th-weight:600;
+    --nav-h:27px; --pane-shadow:none; --dot-radius:1px;
+  }
+
+  /* ---- contrast-a11y : vysoký kontrast ---- */
+  .preview[data-style="contrast-a11y"] {
+    --l-pane:#ffffff; --l-chrome:#ffffff; --l-chromehi:#ffffff; --l-head:#ebebeb;
+    --l-zebra:#ffffff; --l-hover:#dedede; --l-border:#000000; --l-bordersoft:#000000;
+    --l-text:#000000; --l-dim:#262626; --l-faint:#4a4a4a;
+    --l-accent:#0b4f9e; --l-accsoft:#d6e4f7; --l-accfg:#ffffff;
+    --l-ok:#0a5c2a; --l-warn:#6b4400; --l-crit:#a80000;
+
+    --d-pane:#000000; --d-chrome:#000000; --d-chromehi:#0a0a0a; --d-head:#1a1a1a;
+    --d-zebra:#000000; --d-hover:#2b2b2b; --d-border:#ffffff; --d-bordersoft:#c4c4c4;
+    --d-text:#ffffff; --d-dim:#e4e4e4; --d-faint:#bcbcbc;
+    --d-accent:#7cc4ff; --d-accsoft:#0a2a45; --d-accfg:#000000;
+    --d-ok:#55d97f; --d-warn:#ffcc4d; --d-crit:#ff7d70;
+
+    --border-w:2px;
+    --radius:0px; --nav-radius:0px; --sel-bar:5px;
+    --row-h:34px; --title-h:44px; --tb-h:40px; --panehead-h:34px; --status-h:28px;
+    --font-ui:"Segoe UI","Helvetica Neue",system-ui,sans-serif;
+    --font-display:var(--font-ui);
+    --font-data:Consolas,"Cascadia Mono",monospace;
+    --fs-ui:15px; --fs-data:14.5px; --fs-th:14px;
+    --th-transform:none; --th-ls:.2px; --th-weight:700;
+    --nav-h:36px; --pane-shadow:none; --dot-radius:0px;
+  }
+
+  /* ---- admin-common : běžný admin panel (kontrolní vzorek) ---- */
+  .preview[data-style="admin-common"] {
+    --l-pane:#ffffff; --l-chrome:#ffffff; --l-chromehi:#ffffff; --l-head:#fafafa;
+    --l-zebra:#ffffff; --l-hover:#f5f5f5; --l-border:#f0f0f0; --l-bordersoft:#f0f0f0;
+    --l-text:#1f1f1f; --l-dim:#595959; --l-faint:#8c8c8c;
+    --l-accent:#1677ff; --l-accsoft:#e6f4ff; --l-accfg:#ffffff;
+    --l-ok:#389e0d; --l-warn:#d48806; --l-crit:#cf1322;
+
+    --d-pane:#1f1f1f; --d-chrome:#141414; --d-chromehi:#1f1f1f; --d-head:#262626;
+    --d-zebra:#1f1f1f; --d-hover:#262626; --d-border:#303030; --d-bordersoft:#303030;
+    --d-text:#e6e6e6; --d-dim:#a6a6a6; --d-faint:#737373;
+    --d-accent:#1668dc; --d-accsoft:#111a2c; --d-accfg:#ffffff;
+    --d-ok:#49aa19; --d-warn:#d89614; --d-crit:#dc4446;
+
+    --radius:6px; --nav-radius:6px; --sel-bar:0px;
+    --row-h:40px; --title-h:50px; --tb-h:46px; --panehead-h:40px; --status-h:32px;
+    --font-ui:"Segoe UI","Helvetica Neue",system-ui,sans-serif;
+    --font-display:var(--font-ui);
+    --font-data:"Segoe UI","Helvetica Neue",sans-serif;
+    --fs-ui:14px; --fs-data:14px; --fs-th:14px;
+    --th-transform:none; --th-ls:0; --th-weight:600;
+    --nav-h:40px; --pane-shadow:0 2px 6px rgba(0,0,0,.08); --dot-radius:50%;
+  }
+
+  /* ---- saas-modern : současný SaaS / shadcn ---- */
+  .preview[data-style="saas-modern"] {
+    --l-pane:#ffffff; --l-chrome:#f8fafc; --l-chromehi:#ffffff; --l-head:#f8fafc;
+    --l-zebra:#ffffff; --l-hover:#f1f5f9; --l-border:#e2e8f0; --l-bordersoft:#f1f5f9;
+    --l-text:#0f172a; --l-dim:#64748b; --l-faint:#94a3b8;
+    --l-accent:#6366f1; --l-accsoft:#eef2ff; --l-accfg:#ffffff;
+    --l-ok:#16a34a; --l-warn:#d97706; --l-crit:#dc2626;
+
+    --d-pane:#0f172a; --d-chrome:#020617; --d-chromehi:#0f172a; --d-head:#1e293b;
+    --d-zebra:#0f172a; --d-hover:#1e293b; --d-border:#1e293b; --d-bordersoft:#1e293b;
+    --d-text:#f1f5f9; --d-dim:#94a3b8; --d-faint:#64748b;
+    --d-accent:#818cf8; --d-accsoft:#1e1b4b; --d-accfg:#0f172a;
+    --d-ok:#4ade80; --d-warn:#fbbf24; --d-crit:#f87171;
+
+    --radius:8px; --nav-radius:8px; --sel-bar:0px;
+    --row-h:44px; --title-h:56px; --tb-h:52px; --panehead-h:44px; --status-h:34px;
+    --font-ui:Inter,"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
+    --font-display:var(--font-ui);
+    --font-data:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
+    --fs-ui:14px; --fs-data:13.5px; --fs-th:12.5px;
+    --th-transform:none; --th-ls:0; --th-weight:500;
+    --nav-h:38px; --pane-shadow:0 1px 3px rgba(15,23,42,.1); --dot-radius:50%;
+  }
+
+  /* ---- vivid-gradient : fialový gradient ---- */
+  .preview[data-style="vivid-gradient"] {
+    --l-pane:#ffffff; --l-chrome:#faf5ff; --l-chromehi:#ffffff; --l-head:#faf5ff;
+    --l-zebra:#ffffff; --l-hover:#f3e8ff; --l-border:#e9d5ff; --l-bordersoft:#f3e8ff;
+    --l-text:#1e1b4b; --l-dim:#6b7280; --l-faint:#a78bfa;
+    --l-accent:#7c3aed; --l-accsoft:#f5f3ff; --l-accfg:#ffffff;
+    --l-ok:#10b981; --l-warn:#f59e0b; --l-crit:#ef4444;
+
+    --d-pane:#1e1b4b; --d-chrome:#130f33; --d-chromehi:#1e1b4b; --d-head:#2e1065;
+    --d-zebra:#1e1b4b; --d-hover:#2e1065; --d-border:#4c1d95; --d-bordersoft:#312e81;
+    --d-text:#ede9fe; --d-dim:#c4b5fd; --d-faint:#a78bfa;
+    --d-accent:#a78bfa; --d-accsoft:#2e1065; --d-accfg:#1e1b4b;
+    --d-ok:#34d399; --d-warn:#fbbf24; --d-crit:#fb7185;
+
+    --radius:12px; --nav-radius:10px; --sel-bar:0px;
+    --row-h:48px; --title-h:60px; --tb-h:56px; --panehead-h:48px; --status-h:36px;
+    --font-ui:Inter,"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
+    --font-display:var(--font-ui);
+    --font-data:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
+    --fs-ui:14.5px; --fs-data:14px; --fs-th:12.5px;
+    --th-transform:none; --th-ls:0; --th-weight:500;
+    --nav-h:42px; --pane-shadow:0 4px 14px rgba(124,58,237,.18); --dot-radius:50%;
+  }
+
+  /* ---- strukturální odchylky obou „AI" stylů ---- */
+  .preview[data-style="saas-modern"] .p-state,
+  .preview[data-style="vivid-gradient"] .p-state {
+    padding: 3px 10px 3px 9px;
+    border-radius: 999px;
+    background: var(--accsoft);
+    border: 1px solid var(--bordersoft);
+    font-size: calc(var(--fs-ui) - 1.5px);
+    font-weight: 500;
+  }
+  .preview[data-style="saas-modern"] .p-btn,
+  .preview[data-style="vivid-gradient"] .p-btn {
+    background: var(--accent);
+    color: var(--accfg);
+    border-color: transparent;
+    padding: 8px 16px;
+    font-weight: 500;
+    box-shadow: var(--pane-shadow);
+  }
+  .preview[data-style="saas-modern"] .p-btn .icon,
+  .preview[data-style="vivid-gradient"] .p-btn .icon { color: currentColor; }
+  .preview[data-style="saas-modern"] .p-btn:hover,
+  .preview[data-style="vivid-gradient"] .p-btn:hover { filter: brightness(1.1); }
+
+  .preview[data-style="vivid-gradient"] .p-btn {
+    background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 55%, #2563eb 100%);
+    color: #ffffff;
+  }
+  .preview[data-style="vivid-gradient"] .p-brand .mark {
+    background: linear-gradient(135deg, #7c3aed, #2563eb);
+    border-color: transparent;
+    border-radius: 7px;
+  }
+  .preview[data-style="vivid-gradient"] .p-brand .mark::after { background: #ffffff; box-shadow: 0 3px 0 #ffffff; }
+  .preview[data-style="vivid-gradient"] .p-panehead {
+    background: linear-gradient(90deg, var(--accsoft) 0%, transparent 70%);
+  }
+  .preview[data-style="saas-modern"] .p-field,
+  .preview[data-style="vivid-gradient"] .p-field { border-radius: 999px; padding: 4px 12px; }
+
+
+  /* ==========================================================================
+     3. MAPOVÁNÍ SVĚTLÁ / TMAVÁ
+     ========================================================================== */
+
+  .preview {
+    --border-w:1px;
+    --pane:var(--l-pane); --chrome:var(--l-chrome); --chromehi:var(--l-chromehi);
+    --head:var(--l-head); --zebra:var(--l-zebra); --hover:var(--l-hover);
+    --border:var(--l-border); --bordersoft:var(--l-bordersoft);
+    --text:var(--l-text); --dim:var(--l-dim); --faint:var(--l-faint);
+    --accent:var(--l-accent); --accsoft:var(--l-accsoft); --accfg:var(--l-accfg);
+    --ok:var(--l-ok); --warn:var(--l-warn); --crit:var(--l-crit);
+  }
+  @media (prefers-color-scheme: dark) {
+    .preview {
+      --pane:var(--d-pane); --chrome:var(--d-chrome); --chromehi:var(--d-chromehi);
+      --head:var(--d-head); --zebra:var(--d-zebra); --hover:var(--d-hover);
+      --border:var(--d-border); --bordersoft:var(--d-bordersoft);
+      --text:var(--d-text); --dim:var(--d-dim); --faint:var(--d-faint);
+      --accent:var(--d-accent); --accsoft:var(--d-accsoft); --accfg:var(--d-accfg);
+      --ok:var(--d-ok); --warn:var(--d-warn); --crit:var(--d-crit);
+    }
+  }
+  :root[data-theme="light"] .preview {
+    --pane:var(--l-pane); --chrome:var(--l-chrome); --chromehi:var(--l-chromehi);
+    --head:var(--l-head); --zebra:var(--l-zebra); --hover:var(--l-hover);
+    --border:var(--l-border); --bordersoft:var(--l-bordersoft);
+    --text:var(--l-text); --dim:var(--l-dim); --faint:var(--l-faint);
+    --accent:var(--l-accent); --accsoft:var(--l-accsoft); --accfg:var(--l-accfg);
+    --ok:var(--l-ok); --warn:var(--l-warn); --crit:var(--l-crit);
+  }
+  :root[data-theme="dark"] .preview {
+    --pane:var(--d-pane); --chrome:var(--d-chrome); --chromehi:var(--d-chromehi);
+    --head:var(--d-head); --zebra:var(--d-zebra); --hover:var(--d-hover);
+    --border:var(--d-border); --bordersoft:var(--d-bordersoft);
+    --text:var(--d-text); --dim:var(--d-dim); --faint:var(--d-faint);
+    --accent:var(--d-accent); --accsoft:var(--d-accsoft); --accfg:var(--d-accfg);
+    --ok:var(--d-ok); --warn:var(--d-warn); --crit:var(--d-crit);
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Barvy dat. Záměrně NEZÁVISLÉ na stylu: akcent je barva rozhraní, tohle je
+     barva dat. Kdyby se série překreslila při změně stylu, ztratí identitu.
+     Ověřeno scripts/validate_palette.js — všech šest kontrol prošlo v obou
+     režimech i na nejhorších podkladech z katalogu.
+     -------------------------------------------------------------------------- */
+  .preview { --viz-1:#2a78d6; --viz-2:#eb6834; --viz-pos:#2a78d6; --viz-neg:#e34948; }
+  @media (prefers-color-scheme: dark) {
+    .preview { --viz-1:#3987e5; --viz-2:#d95926; --viz-pos:#3987e5; --viz-neg:#e66767; }
+  }
+  :root[data-theme="light"] .preview { --viz-1:#2a78d6; --viz-2:#eb6834; --viz-pos:#2a78d6; --viz-neg:#e34948; }
+  :root[data-theme="dark"] .preview { --viz-1:#3987e5; --viz-2:#d95926; --viz-pos:#3987e5; --viz-neg:#e66767; }
+
+
+  /* ==========================================================================
+     4. APLIKACE — jediný markup, mění se jen tokeny
+     ========================================================================== */
+
+  .preview {
+    height: 540px;
+    display: grid;
+    grid-template-columns: 186px 1fr;
+    grid-template-rows: var(--title-h) 1fr var(--status-h);
+    grid-template-areas: "t t" "n m" "s s";
+    background: var(--chrome);
+    color: var(--text);
+    font-family: var(--font-ui);
+    font-size: var(--fs-ui);
+    line-height: 1.35;
+  }
+
+  .preview .icon { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .preview .icon-sm { width: 13px; height: 13px; }
+
+  /* --- titulní lišta --- */
+  .p-title {
+    grid-area: t;
+    display: flex; align-items: center; gap: 9px;
+    padding: 0 11px;
+    background: var(--chromehi);
+    border-bottom: var(--border-w) solid var(--border);
+  }
+  .p-brand {
+    display: flex; align-items: center; gap: 7px;
+    font-family: var(--font-display);
+    font-weight: 650;
+  }
+  .p-brand .mark {
+    width: 15px; height: 15px; flex: none;
+    border: 1.5px solid var(--accent);
+    border-radius: var(--radius);
+    position: relative;
+  }
+  .p-brand .mark::after {
+    content: ""; position: absolute; inset: 3px 3px auto 3px;
+    height: 1.5px; background: var(--accent); box-shadow: 0 3px 0 var(--accent);
+  }
+  .p-brand .sub { color: var(--dim); font-weight: 400; }
+  .p-title .vsep { width: 1px; align-self: stretch; margin: 7px 1px; background: var(--border); }
+  .p-title .grow { flex: 1; }
+
+  .p-field {
+    display: flex; align-items: center; gap: 6px;
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--pane);
+    color: var(--dim);
+    font-size: calc(var(--fs-ui) - .5px);
+  }
+
+  /* --- boční menu --- */
+  .p-nav {
+    grid-area: n;
+    background: var(--chrome);
+    border-right: var(--border-w) solid var(--border);
+    padding: 5px 6px;
+    overflow-y: auto;
+  }
+  .p-navitem {
+    display: flex; align-items: center; gap: 9px;
+    width: 100%; height: var(--nav-h);
+    padding: 0 8px;
+    border: 0; border-radius: var(--nav-radius);
+    background: none; color: var(--text);
+    font: inherit; text-align: left; cursor: default;
+  }
+  .p-navitem:hover { background: var(--hover); }
+  .p-navitem .icon { color: var(--dim); }
+  .p-navitem[aria-current="true"] {
+    background: var(--accsoft);
+    box-shadow: inset var(--sel-bar) 0 0 var(--accent);
+    font-weight: 650;
+  }
+  .p-navitem[aria-current="true"] .icon { color: var(--accent); }
+  .p-navsec {
+    padding: 12px 8px 4px;
+    font-size: 10px; letter-spacing: .6px; text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  /* --- hlavní panel --- */
+  .p-main { grid-area: m; display: flex; flex-direction: column; min-width: 0; background: var(--pane); }
+
+  .p-panehead {
+    display: flex; align-items: center; gap: 8px;
+    height: var(--panehead-h); padding: 0 11px;
+    background: var(--accsoft);
+    border-bottom: var(--border-w) solid var(--border);
+    font-family: var(--font-display);
+    font-weight: 650;
+  }
+  .p-panehead .icon { color: var(--accent); }
+  .p-panehead .n { margin-left: auto; font-weight: 400; color: var(--dim); font-family: var(--font-ui); font-size: calc(var(--fs-ui) - .5px); }
+
+  .p-toolbar {
+    display: flex; align-items: center; gap: 8px;
+    height: var(--tb-h); padding: 0 8px;
+    background: var(--chromehi);
+    border-bottom: var(--border-w) solid var(--border);
+    overflow-x: auto;
+  }
+  .p-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    border: 1px solid transparent; border-radius: var(--radius);
+    background: none; color: var(--text); font: inherit; white-space: nowrap; cursor: default;
+    box-shadow: var(--pane-shadow);
+  }
+  .p-btn:hover { background: var(--pane); border-color: var(--border); }
+  .p-btn .icon { color: var(--accent); }
+  .p-toolbar .meta { color: var(--dim); font-size: calc(var(--fs-ui) - .5px); white-space: nowrap; }
+  .p-toolbar .vsep { width: 1px; height: 15px; background: var(--border); flex: none; }
+
+  .p-gridwrap { flex: 1; overflow: auto; }
+
+  .p-table { border-collapse: collapse; width: 100%; min-width: 880px; }
+  .p-table thead th {
+    position: sticky; top: 0; z-index: 3;
+    height: calc(var(--row-h) + 2px);
+    padding: 0 10px;
+    background: var(--head);
+    border-bottom: var(--border-w) solid var(--border);
+    color: var(--dim);
+    font-family: var(--font-ui);
+    font-size: var(--fs-th);
+    font-weight: var(--th-weight);
+    letter-spacing: var(--th-ls);
+    text-transform: var(--th-transform);
+    text-align: left; white-space: nowrap;
+  }
+  .p-table tbody td {
+    height: var(--row-h);
+    padding: 0 10px;
+    border-bottom: var(--border-w) solid var(--bordersoft);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .p-table tbody tr:nth-child(even) td { background: var(--zebra); }
+  .p-table tbody tr:hover td { background: var(--hover); }
+  .p-table tbody tr[data-sel="true"] td { background: var(--accsoft); }
+  .p-table tbody tr[data-sel="true"] td:first-child { box-shadow: inset var(--sel-bar) 0 0 var(--accent); }
+
+  .c-date { font-family: var(--font-data); font-size: var(--fs-data); color: var(--dim); width: 108px; }
+  .c-amt  { font-family: var(--font-data); font-size: var(--fs-data); text-align: right; width: 108px; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .c-vs   { font-family: var(--font-data); font-size: var(--fs-data); width: 108px; color: var(--dim); }
+  .c-to   { width: 168px; }
+  .c-state{ width: 148px; }
+  th.c-amt { text-align: right; }
+
+  .p-state { display: inline-flex; align-items: center; }
+
+  .p-dot {
+    display: inline-block; width: 7px; height: 7px; flex: none;
+    margin-right: 7px; border-radius: var(--dot-radius);
+    background: var(--faint);
+  }
+  .st-ok  .p-dot { background: var(--ok); }
+  .st-warn .p-dot { background: var(--warn); }
+  .st-crit .p-dot { background: var(--crit); }
+  .st-man .p-dot { background: var(--accent); }
+  .dim { color: var(--faint); }
+
+  /* --- stavový řádek --- */
+  .p-status {
+    grid-area: s;
+    display: flex; align-items: center;
+    padding: 0 11px;
+    background: var(--chromehi);
+    border-top: var(--border-w) solid var(--border);
+    color: var(--dim);
+    font-size: calc(var(--fs-ui) - 1px);
+  }
+  .p-status > span { padding: 0 10px; border-right: var(--border-w) solid var(--border); }
+  .p-status > span:first-child { padding-left: 0; }
+  .p-status > span:last-child { border-right: 0; }
+  .p-status b { color: var(--text); font-weight: 650; font-variant-numeric: tabular-nums; }
+  .p-status .grow { flex: 1; border-right: 0; }
+
+  [hidden] { display: none !important; }
+
+  /* ==========================================================================
+     5. GRAFY
+     Marks podle specifikace: sloupce ≤24 px se zaoblenou datovou hranou a
+     hranatou patou, čáry 2 px, mezera 2 px v barvě podkladu mezi doteky,
+     mřížka vlasová a ustupující, popisky výběrové. Text nikdy nenosí barvu dat.
+     ========================================================================== */
+
+  .p-charts {
+    flex: 1;
+    overflow: auto;
+    padding: 14px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-content: start;
+    position: relative;
+  }
+  .viz-wide { grid-column: 1 / -1; }
+  @media (max-width: 780px) {
+    .p-charts { grid-template-columns: 1fr; }
+  }
+
+  /* --- pruh ukazatelů --- */
+  .viz-kpis {
+    grid-column: 1 / -1;
+    display: flex; flex-wrap: wrap;
+    border: var(--border-w) solid var(--border);
+    border-radius: var(--radius);
+    background: var(--pane);
+  }
+  .viz-tile {
+    flex: 1; min-width: 168px;
+    padding: 9px 13px;
+    display: flex; flex-direction: column; gap: 1px;
+    border-right: var(--border-w) solid var(--bordersoft);
+  }
+  .viz-tile:last-child { border-right: 0; }
+  .viz-label { color: var(--dim); font-size: calc(var(--fs-ui) - 1.5px); }
+  .viz-value { font-size: calc(var(--fs-ui) + 9px); font-weight: 650; line-height: 1.25; }
+  .viz-delta { font-size: calc(var(--fs-ui) - 1.5px); }
+  .viz-delta.good { color: var(--ok); }
+  .viz-delta.bad { color: var(--crit); }
+  .viz-spark { display: block; width: 100%; height: 34px; margin-top: 5px; overflow: visible; }
+
+  /* --- karta grafu --- */
+  .viz-card {
+    margin: 0;
+    padding: 11px 13px 9px;
+    border: var(--border-w) solid var(--border);
+    border-radius: var(--radius);
+    background: var(--pane);
+    box-shadow: var(--pane-shadow);
+    min-width: 0;
+  }
+  .viz-card figcaption { display: flex; flex-direction: column; gap: 1px; margin-bottom: 3px; }
+  .viz-title { font-family: var(--font-display); font-weight: 650; }
+  .viz-sub { color: var(--dim); font-size: calc(var(--fs-ui) - 1.5px); }
+
+  .viz-legend { display: flex; flex-wrap: wrap; gap: 13px; margin: 6px 0 2px; }
+  .viz-legend span { display: inline-flex; align-items: center; gap: 6px; color: var(--dim); font-size: calc(var(--fs-ui) - 1.5px); }
+  .viz-legend i { width: 10px; height: 10px; flex: none; border-radius: 2px; }
+  .viz-legend i.line { height: 3px; border-radius: 2px; }
+  .viz-legend i.sw-1 { background: var(--viz-1); }
+  .viz-legend i.sw-2 { background: var(--viz-2); }
+  .viz-legend i.sw-p { background: var(--viz-pos); }
+  .viz-legend i.sw-n { background: var(--viz-neg); }
+
+  .viz-plot { position: relative; }
+  .viz-plot svg { display: block; width: 100%; }
+
+  .viz-table { margin-top: 7px; }
+  .viz-table summary {
+    cursor: pointer; color: var(--dim);
+    font-size: calc(var(--fs-ui) - 1.5px);
+    padding: 2px 0;
+  }
+  .viz-table summary:hover { color: var(--text); }
+  .viz-table table { border-collapse: collapse; width: 100%; margin-top: 4px; }
+  .viz-table th, .viz-table td {
+    padding: 2px 8px 2px 0; text-align: left;
+    border-bottom: 1px solid var(--bordersoft);
+    font-size: calc(var(--fs-ui) - 1.5px);
+  }
+  .viz-table th { color: var(--dim); font-weight: 600; }
+  .viz-table td.num { text-align: right; font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+
+  /* --- značky --- */
+  .viz-b1  { fill: var(--viz-1); }
+  .viz-b2  { fill: var(--viz-2); }
+  .viz-bp  { fill: var(--viz-pos); }
+  .viz-bn  { fill: var(--viz-neg); }
+  .viz-ref { stroke: var(--viz-2); stroke-width: 2; fill: none; stroke-linecap: round; }
+  .viz-grid { stroke: var(--bordersoft); stroke-width: 1; }
+  .viz-axis { stroke: var(--border); stroke-width: 1; }
+  .viz-tick { fill: var(--faint); font-size: 10px; font-family: var(--font-ui); font-variant-numeric: tabular-nums; }
+  .viz-val  { fill: var(--dim); font-size: 10.5px; font-family: var(--font-ui); font-variant-numeric: tabular-nums; }
+  .viz-cat  { fill: var(--text); font-size: 11px; font-family: var(--font-ui); }
+  .viz-sparkline { stroke: var(--faint); stroke-width: 2; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+  .viz-sparkdot { fill: var(--viz-1); stroke: var(--pane); stroke-width: 2; }
+  .viz-hit { fill: transparent; cursor: default; }
+
+  /* --- bublina --- */
+  .viz-tip {
+    position: absolute; z-index: 30;
+    pointer-events: none;
+    padding: 5px 9px;
+    background: var(--pane);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 3px 10px rgba(0,0,0,.22);
+    font-size: calc(var(--fs-ui) - 1px);
+    white-space: nowrap;
+    transform: translate(-50%, -100%);
+  }
+  .viz-tip[hidden] { display: none !important; }
+  .viz-tip b { font-variant-numeric: tabular-nums; }
+</style>
+
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="s-grid" viewBox="0 0 16 16"><rect x="2" y="2" width="5" height="5"/><rect x="9" y="2" width="5" height="5"/><rect x="2" y="9" width="5" height="5"/><rect x="9" y="9" width="5" height="5"/></symbol>
+    <symbol id="s-list" viewBox="0 0 16 16"><path d="M5.2 4h9M5.2 8h9M5.2 12h9M2.4 4h.01M2.4 8h.01M2.4 12h.01"/></symbol>
+    <symbol id="s-users" viewBox="0 0 16 16"><circle cx="6" cy="5.4" r="2.4"/><path d="M1.6 13.6c0-2.4 2-3.9 4.4-3.9s4.4 1.5 4.4 3.9"/><path d="M11 3.3a2.4 2.4 0 0 1 0 4.2M12 9.9c1.6.5 2.4 1.8 2.4 3.7"/></symbol>
+    <symbol id="s-bank" viewBox="0 0 16 16"><path d="M8 1.8 14.5 5v1.2h-13V5z"/><path d="M3.4 6.6v5.2M6.5 6.6v5.2M9.5 6.6v5.2M12.6 6.6v5.2"/><path d="M1.8 13.4h12.4"/></symbol>
+    <symbol id="s-doc" viewBox="0 0 16 16"><path d="M3.6 1.6h5.9L12.4 5v9.4h-8.8z"/><path d="M9.5 1.6V5h2.9"/></symbol>
+    <symbol id="s-lock" viewBox="0 0 16 16"><rect x="3.2" y="7" width="9.6" height="7.2"/><path d="M5.4 7V4.8a2.6 2.6 0 0 1 5.2 0V7"/></symbol>
+    <symbol id="s-sum" viewBox="0 0 16 16"><path d="M12.4 2.2H3.6L8 8l-4.4 5.8h8.8"/></symbol>
+    <symbol id="s-gear" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.3"/><path d="M8 1.6v2.1M8 12.3v2.1M1.6 8h2.1M12.3 8h2.1M3.5 3.5l1.5 1.5M11 11l1.5 1.5M12.5 3.5 11 5M5 11l-1.5 1.5"/></symbol>
+    <symbol id="s-refresh" viewBox="0 0 16 16"><path d="M13.4 8A5.4 5.4 0 1 1 11.6 4"/><path d="M13.7 1.6v3.1h-3.1"/></symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <h1>Volba vizuálního stylu</h1>
+    <p>
+      Táž aplikace vykreslená ve čtrnácti stylech. Markup je ve všech případech
+      identický, mění se jen sada tokenů. Přepínej styl, světelný režim a obrazovku
+      (<b>Tabulka</b> / <b>Grafy</b>) a porovnávej. Slug u vybraného stylu je to,
+      co se pak zapíše do projektu jako <code>ui.style</code>.
+      <br>
+      Barvy dat jsou naopak <b>na stylu nezávislé</b> — akcent je barva rozhraní,
+      série je identita a nesmí se překreslit jen proto, že se změnil vzhled.
+    </p>
+  </header>
+
+  <div class="controls">
+    <div class="styletabs" id="tabs" role="group" aria-label="Vizuální styl"></div>
+    <span class="grow"></span>
+    <div class="themeswitch" role="group" aria-label="Obrazovka">
+      <button type="button" data-view-set="table" aria-pressed="true">Tabulka</button>
+      <button type="button" data-view-set="charts" aria-pressed="false">Grafy</button>
+    </div>
+    <div class="themeswitch" role="group" aria-label="Světelný režim">
+      <button type="button" data-theme-set="auto" aria-pressed="true">Podle systému</button>
+      <button type="button" data-theme-set="light" aria-pressed="false">Světlý</button>
+      <button type="button" data-theme-set="dark" aria-pressed="false">Tmavý</button>
+    </div>
+  </div>
+
+  <section class="idcard">
+    <div class="about">
+      <span class="slug" id="idSlug">ops-steel</span>
+      <h2 id="idName">Správcovská konzole</h2>
+      <p class="caution" id="idCaution" hidden></p>
+      <p class="lede" id="idLede"></p>
+      <p class="use"><b>Kdy sáhnout:</b> <span id="idUse"></span></p>
+      <div class="swatches" id="idSwatches"></div>
+    </div>
+    <div class="specs">
+      <table class="spectable">
+        <tbody>
+          <tr><th>Písmo UI</th><td id="spFont"></td></tr>
+          <tr><th>Písmo dat</th><td id="spData"></td></tr>
+          <tr><th>Rádius</th><td id="spRadius"></td></tr>
+          <tr><th>Výška řádku</th><td id="spRow"></td></tr>
+          <tr><th>Velikost písma</th><td id="spSize"></td></tr>
+          <tr><th>Řádků na 500 px</th><td id="spDensity"></td></tr>
+          <tr><th>Zebra</th><td id="spZebra"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="frame">
+    <div class="framebar">
+      <span class="dot3"><i></i><i></i><i></i></span>
+      <span id="frameLabel">ops-steel — světlý režim</span>
+    </div>
+
+    <div class="preview" id="preview" data-style="ops-steel">
+
+      <div class="p-title">
+        <span class="p-brand"><span class="mark"></span>FIO-úhrady<span class="sub">— Hostěrádky 213</span></span>
+        <span class="vsep"></span>
+        <span class="p-field">Období: srpen 2026</span>
+        <span class="grow"></span>
+        <span class="p-field">Účet 2301234567/2010</span>
+      </div>
+
+      <nav class="p-nav">
+        <button class="p-navitem" type="button"><svg class="icon"><use href="#s-grid"/></svg>Přehled</button>
+        <button class="p-navitem" type="button"><svg class="icon"><use href="#s-list"/></svg>Náklady domu</button>
+        <button class="p-navitem" type="button"><svg class="icon"><use href="#s-users"/></svg>Osoby</button>
+        <button class="p-navitem" type="button" aria-current="true"><svg class="icon"><use href="#s-bank"/></svg>Úhrady z Fio</button>
+        <button class="p-navitem" type="button"><svg class="icon"><use href="#s-doc"/></svg>Příspěvky a vyrovnání</button>
+        <button class="p-navitem" type="button"><svg class="icon"><use href="#s-lock"/></svg>Uzávěrky</button>
+        <button class="p-navitem" type="button"><svg class="icon"><use href="#s-sum"/></svg>Vyúčtování</button>
+        <div class="p-navsec">Správa</div>
+        <button class="p-navitem" type="button"><svg class="icon"><use href="#s-gear"/></svg>Nastavení</button>
+      </nav>
+
+      <main class="p-main">
+        <div class="p-panehead">
+          <svg class="icon icon-sm"><use href="#s-bank"/></svg><span id="paneTitle">Úhrady z Fio</span>
+          <span class="n" id="paneMeta">10 pohybů · 26 081 Kč</span>
+        </div>
+
+        <div class="p-toolbar">
+          <button class="p-btn" type="button"><svg class="icon icon-sm"><use href="#s-refresh"/></svg><span id="tbBtn">Stáhnout z banky</span></button>
+          <span class="vsep"></span>
+          <span class="meta" id="tbMeta">naposledy 2026-08-20 12:45:46 — staženo 3 pohyby za 2026-08-06 až 2026-08-20</span>
+        </div>
+
+        <div class="p-gridwrap" id="tableView">
+          <table class="p-table">
+            <thead>
+              <tr>
+                <th class="c-date">Datum</th>
+                <th class="c-amt">Částka</th>
+                <th class="c-vs">VS</th>
+                <th>Plátce a poznámka</th>
+                <th class="c-to">Přiřazeno k</th>
+                <th class="c-state">Stav</th>
+              </tr>
+            </thead>
+            <tbody id="tbody">
+              <tr data-sel="true"><td class="c-date">2026-08-19</td><td class="c-amt">1 250,00</td><td class="c-vs">213002003</td><td>Nováková J. <span class="dim">— záloha 08/2026</span></td><td>Nováková Jana</td><td class="st-ok"><span class="p-state"><span class="p-dot"></span>Spárováno</span></td></tr>
+              <tr><td class="c-date">2026-08-19</td><td class="c-amt">101,00</td><td class="c-vs dim">—</td><td>Kučera P.</td><td class="dim">—</td><td class="st-warn"><span class="p-state"><span class="p-dot"></span>Nepřiřazeno</span></td></tr>
+              <tr><td class="c-date">2026-08-19</td><td class="c-amt">100,00</td><td class="c-vs">213002003</td><td>Nováková J.</td><td>Nováková Jana</td><td class="st-crit"><span class="p-state"><span class="p-dot"></span>Možná duplicita</span></td></tr>
+              <tr><td class="c-date">2026-08-18</td><td class="c-amt">3 400,00</td><td class="c-vs">213002007</td><td>Svobodová M. <span class="dim">— vyúčtování 2025</span></td><td>Svobodová Marie</td><td class="st-ok"><span class="p-state"><span class="p-dot"></span>Spárováno</span></td></tr>
+              <tr><td class="c-date">2026-08-18</td><td class="c-amt">1 250,00</td><td class="c-vs">213002011</td><td>Dvořák T. <span class="dim">— záloha 08/2026</span></td><td>Dvořák Tomáš</td><td class="st-ok"><span class="p-state"><span class="p-dot"></span>Spárováno</span></td></tr>
+              <tr><td class="c-date">2026-08-17</td><td class="c-amt">2 000,00</td><td class="c-vs">213002004</td><td>Horáková A. <span class="dim">— oprava výtahu</span></td><td>Horáková Alena</td><td class="st-ok"><span class="p-state"><span class="p-dot"></span>Spárováno</span></td></tr>
+              <tr><td class="c-date">2026-08-15</td><td class="c-amt">1 250,00</td><td class="c-vs dim">—</td><td>Marek J. <span class="dim">— zaloha srpen</span></td><td>Marek Jiří</td><td class="st-man"><span class="p-state"><span class="p-dot"></span>Ručně přiřazeno</span></td></tr>
+              <tr><td class="c-date">2026-08-14</td><td class="c-amt">480,00</td><td class="c-vs">213002009</td><td>Pokorná L. <span class="dim">— elektřina společné</span></td><td>Pokorná Lucie</td><td class="st-ok"><span class="p-state"><span class="p-dot"></span>Spárováno</span></td></tr>
+              <tr><td class="c-date">2026-08-12</td><td class="c-amt">1 250,00</td><td class="c-vs">213002012</td><td>Beneš R. <span class="dim">— záloha 08/2026</span></td><td>Beneš Radek</td><td class="st-ok"><span class="p-state"><span class="p-dot"></span>Spárováno</span></td></tr>
+              <tr><td class="c-date">2026-08-11</td><td class="c-amt">15 000,00</td><td class="c-vs dim">—</td><td>Společenství vlastníků <span class="dim">— převod z fondu oprav</span></td><td class="dim">—</td><td class="st-warn"><span class="p-state"><span class="p-dot"></span>Nepřiřazeno</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="p-charts" id="chartsView" hidden>
+          <div class="viz-kpis">
+            <div class="viz-tile">
+              <span class="viz-label">Vybráno od ledna 2026</span>
+              <span class="viz-value">206 111 Kč</span>
+              <span class="viz-delta good">+4,2 % proti stejnému období 2025</span>
+              <svg class="viz-spark" id="spark1" aria-hidden="true"></svg>
+            </div>
+            <div class="viz-tile">
+              <span class="viz-label">Nedoplatky</span>
+              <span class="viz-value">4 650 Kč</span>
+              <span class="viz-delta bad">4 osoby ze 12</span>
+            </div>
+            <div class="viz-tile">
+              <span class="viz-label">Průměrná prodleva úhrady</span>
+              <span class="viz-value">3,4 dne</span>
+              <span class="viz-delta good">−0,8 dne proti loňsku</span>
+            </div>
+          </div>
+
+          <figure class="viz-card viz-wide">
+            <figcaption>
+              <span class="viz-title">Uhrazeno po měsících</span>
+              <span class="viz-sub">proti měsíčnímu předpisu 26 040 Kč</span>
+            </figcaption>
+            <div class="viz-legend">
+              <span><i class="sw-1"></i>Uhrazeno</span>
+              <span><i class="line sw-2"></i>Předpis</span>
+            </div>
+            <div class="viz-plot"><svg id="ch1"></svg></div>
+            <details class="viz-table"><summary>Zobrazit jako tabulku</summary><div id="tb1"></div></details>
+          </figure>
+
+          <figure class="viz-card">
+            <figcaption>
+              <span class="viz-title">Náklady domu podle kategorie</span>
+              <span class="viz-sub">rok 2026, celkem 192 200 Kč</span>
+            </figcaption>
+            <div class="viz-plot"><svg id="ch2"></svg></div>
+            <details class="viz-table"><summary>Zobrazit jako tabulku</summary><div id="tb2"></div></details>
+          </figure>
+
+          <figure class="viz-card">
+            <figcaption>
+              <span class="viz-title">Saldo podle osoby</span>
+              <span class="viz-sub">stav k 2026-08-20</span>
+            </figcaption>
+            <div class="viz-legend">
+              <span><i class="sw-p"></i>Přeplatek</span>
+              <span><i class="sw-n"></i>Nedoplatek</span>
+            </div>
+            <div class="viz-plot"><svg id="ch3"></svg></div>
+            <details class="viz-table"><summary>Zobrazit jako tabulku</summary><div id="tb3"></div></details>
+          </figure>
+
+          <div class="viz-tip" id="vizTip" hidden></div>
+        </div>
+      </main>
+
+      <footer class="p-status">
+        <span><b>10</b> pohybů</span>
+        <span><b>7</b> spárováno</span>
+        <span><b>2</b> nepřiřazeno</span>
+        <span><b>1</b> ke kontrole</span>
+        <span class="grow"></span>
+        <span>Fio API v pořádku</span>
+      </footer>
+    </div>
+  </div>
+
+  <p class="note">Data v ukázce jsou smyšlená.</p>
+</div>
+
+<script>
+  (function () {
+    var STYLES = [
+      {
+        slug: "ops-steel",
+        name: "Správcovská konzole",
+        lede: "Referencí je WinBox a podobné síťové nástroje. Maximální hustota, panely oddělené linkami místo stínů, nativní systémové písmo.",
+        use: "vnitřní nástroje, kde se hodně čte z tabulky a málo se scrolluje — inventář, zařízení, úhrady.",
+        sw: ["#31628c", "#edeff2", "#ffffff", "#c9cfd6", "#3d7f4c"],
+        font: "Segoe UI Variable",
+        data: "Cascadia Mono",
+        radius: "2 px",
+        row: "26 px",
+        size: "12,5 / 11,5 px",
+        zebra: "ano"
+      },
+      {
+        slug: "carbon-grid",
+        name: "Enterprise datová mřížka",
+        lede: "Vychází z IBM Carbon. Nulový rádius, všechno zarovnané do tvrdé mřížky, výraznější modrá. Větší písmo než ostatní styly, ale ostré hrany.",
+        use: "aplikace, které mají působit jako infrastrukturní konzole a budou je používat i lidé zvenčí.",
+        sw: ["#0f62fe", "#f4f4f4", "#ffffff", "#e0e0e0", "#198038"],
+        font: "Segoe UI",
+        data: "Consolas",
+        radius: "0 px",
+        row: "32 px",
+        size: "13,5 / 13 px",
+        zebra: "ne — jen hover"
+      },
+      {
+        slug: "fluent-win",
+        name: "Nativní Windows aplikace",
+        lede: "Windows 11 / Fluent. Zaoblené rohy, vrstvené šedé plochy, jemný stín, položka menu jako pilulka. Vypadá jako součást systému, ne jako web.",
+        use: "nástroje spouštěné na firemních stanicích vedle ostatních systémových aplikací.",
+        sw: ["#0067c0", "#f3f3f3", "#ffffff", "#e5e5e5", "#0f7b0f"],
+        font: "Segoe UI Variable",
+        data: "Consolas",
+        radius: "5 px",
+        row: "32 px",
+        size: "13 / 12,5 px",
+        zebra: "ne — jen hover"
+      },
+      {
+        slug: "console-dark",
+        name: "Monitorovací konzole",
+        lede: "Tmavé prostředí, neproporcionální písmo úplně všude včetně menu, okrová jako jediná barva. Nejtěsnější řádkování ze všech stylů.",
+        use: "logy, metriky, běhy úloh — obrazovky, které visí otevřené celý den.",
+        sw: ["#d08b2c", "#0f1317", "#14181d", "#262e37", "#4fa86a"],
+        font: "Cascadia Mono",
+        data: "Cascadia Mono",
+        radius: "1 px",
+        row: "24 px",
+        size: "12 / 11,5 px",
+        zebra: "ano"
+      },
+      {
+        slug: "paper-doc",
+        name: "Tiskový výkaz",
+        lede: "Papír, ne obrazovka. Patkové písmo v nadpisech i v číslech, vlasové linky, tlumená zelená, žádná barevná plocha navíc. Vzdušnější řádkování.",
+        use: "vyúčtování, sestavy a přehledy, které končí vytištěné nebo v PDF u někoho na stole.",
+        sw: ["#33604a", "#f7f6f3", "#ffffff", "#d9d5cc", "#8a6212"],
+        font: "Segoe UI + Cambria",
+        data: "Cambria",
+        radius: "0 px",
+        row: "30 px",
+        size: "13,5 px",
+        zebra: "ne"
+      },
+      {
+        slug: "ledger-mono",
+        name: "Finanční terminál",
+        lede: "Nejhustší varianta. Vše číselné neproporcionálně a zarovnané doprava, hlavičky verzálkami, akcent ustupuje do pozadí, aby vynikly stavové barvy.",
+        use: "obrazovky, kde jsou hlavně částky a je potřeba vidět jich co nejvíc najednou.",
+        sw: ["#35678c", "#f2f3f5", "#ffffff", "#cdd2d8", "#1f7a43"],
+        font: "Segoe UI",
+        data: "Cascadia Mono",
+        radius: "1 px",
+        row: "22 px",
+        size: "11,5 px",
+        zebra: "ano"
+      },
+      {
+        slug: "blueprint-dense",
+        name: "Datový terminál",
+        lede: "Vzhled knihovny Blueprint od Palantiru. Ve tmavém režimu modrošedý podklad místo černé — méně únavný než čistá tmavá, ale pořád tmavý. Bez zebry, oddělují se jen linkami.",
+        use: "hustá aplikace, kterou stavíš v Reactu a bereš k ní rovnou Blueprint jako knihovnu komponent.",
+        sw: ["#2d72d2", "#2f343c", "#f6f7f9", "#404854", "#238551"],
+        font: "Segoe UI",
+        data: "Cascadia Mono",
+        radius: "2 px",
+        row: "28 px",
+        size: "13 / 12,5 px",
+        zebra: "ne"
+      },
+      {
+        slug: "swiss-rule",
+        name: "Švýcarská mřížka",
+        lede: "Typografická škola místo barevného schématu. Bílá plocha, černé strukturní linky, jediná červená. Hlavičky verzálkami s velkým prostrkáním. Grotesk všude, i v číslech.",
+        use: "když má aplikace působit navrženě a ne poskládaně — nebo když ji uvidí někdo zvenčí.",
+        sw: ["#d42a20", "#ffffff", "#111111", "#d8d8d8", "#1f6b3a"],
+        font: "Helvetica / Arial",
+        data: "Helvetica / Arial",
+        radius: "0 px",
+        row: "28 px",
+        size: "13 / 12,5 px",
+        zebra: "ne"
+      },
+      {
+        slug: "nord-calm",
+        name: "Tlumená arktická",
+        lede: "Paleta Nord. Odbarvené modrošedé tóny, nižší kontrast než ostatní styly, ale pořád čitelné. Nic nesvítí, nic nekřičí. Zaoblení 3 px.",
+        use: "obrazovky, u kterých někdo sedí osm hodin denně a nemá je nenávidět.",
+        sw: ["#5e81ac", "#eceff4", "#2e3440", "#88c0d0", "#a3be8c"],
+        font: "Segoe UI Variable",
+        data: "Cascadia Mono",
+        radius: "3 px",
+        row: "27 px",
+        size: "12,5 / 12 px",
+        zebra: "ano, jemná"
+      },
+      {
+        slug: "zinc-mute",
+        name: "Bez akcentní barvy",
+        lede: "Nejstřídmější varianta. Žádná dekorativní barva — výběr řádku je tmavě šedý, hierarchii nese jen tučnost a odsazení. Barva se objeví výhradně ve stavovém sloupci.",
+        use: "aplikace, kde je barevný stav to jediné důležité a nesmí s ním nic soupeřit.",
+        sw: ["#3f3f46", "#f4f4f5", "#ffffff", "#c8c8cc", "#b03a2e"],
+        font: "Segoe UI Variable",
+        data: "Cascadia Mono",
+        radius: "2 px",
+        row: "26 px",
+        size: "12,5 / 11,5 px",
+        zebra: "ano"
+      },
+      {
+        slug: "contrast-a11y",
+        name: "Vysoký kontrast",
+        lede: "Přístupnost na prvním místě. Ohraničení 2 px, černá na bílé (a bílá na černé), písmo 15 px, řádek 34 px, výrazný pruh u vybraného řádku. Nejnižší hustota ze všech.",
+        use: "cokoli, co má projít kontrolou přístupnosti — nebo co používá někdo se slabším zrakem.",
+        sw: ["#0b4f9e", "#ffffff", "#000000", "#a80000", "#0a5c2a"],
+        font: "Segoe UI",
+        data: "Consolas",
+        radius: "0 px",
+        row: "34 px",
+        size: "15 / 14,5 px",
+        zebra: "ne"
+      },
+      {
+        slug: "admin-common",
+        name: "Běžný admin panel",
+        caution: "Kontrolní vzorek — tenhle styl tu je proto, abys viděl, co odmítáš.",
+        lede: "Výchozí vzhled Ant Design a podobných knihoven. Zaoblení 6 px, jemné stíny, řádek 40 px, hodně vzduchu. Není špatný — je jen okamžitě zařaditelný a na stejné výšce okna zobrazí polovinu dat.",
+        use: "nikam, pokud ti nevadí, že aplikace vypadá jako každá druhá.",
+        sw: ["#1677ff", "#ffffff", "#fafafa", "#f0f0f0", "#389e0d"],
+        font: "Segoe UI",
+        data: "Segoe UI (bez mono)",
+        radius: "6 px",
+        row: "40 px",
+        size: "14 px",
+        zebra: "ne"
+      },
+      {
+        slug: "saas-modern",
+        name: "Současný SaaS",
+        caution: "Tohle je ten vzhled, který dnes generuje AI. Není špatný — je jen okamžitě rozpoznatelný.",
+        lede: "Tailwind a shadcn/ui v základním nastavení. Zaoblení 8 px, indigová, chladné modrošedé neutrály, jemný stín pod plochami, stav jako pilulka místo tečky, plné tlačítko. Písmo Inter, pokud je nainstalované.",
+        use: "produkt pro zákazníky, u kterého je hlavní, aby působil současně, a hustota dat je vedlejší.",
+        sw: ["#6366f1", "#f8fafc", "#ffffff", "#e2e8f0", "#16a34a"],
+        font: "Inter → Segoe UI",
+        data: "bez neproporcionálního",
+        radius: "8 px",
+        row: "44 px",
+        size: "14 / 13,5 px",
+        zebra: "ne"
+      },
+      {
+        slug: "vivid-gradient",
+        name: "Fialový gradient",
+        caution: "Nejrozpoznatelnější „AI vzhled“ vůbec. Ukázka toho, kam se to dá dotáhnout.",
+        lede: "Plná verze: zaoblení 12 px, fialovomodrý přechod na tlačítku i ve znaku, barevný stín, řádek 48 px. Ve tmavém režimu tmavě fialový podklad místo šedé.",
+        use: "prezentace, landing page, demo pro někoho zvenčí. Ne na obrazovku, ve které se pracuje.",
+        sw: ["#7c3aed", "#faf5ff", "#ffffff", "#e9d5ff", "#10b981"],
+        font: "Inter → Segoe UI",
+        data: "bez neproporcionálního",
+        radius: "12 px",
+        row: "48 px",
+        size: "14,5 / 14 px",
+        zebra: "ne"
+      }
+    ];
+
+    var preview = document.getElementById("preview");
+    var tabs = document.getElementById("tabs");
+    var frameLabel = document.getElementById("frameLabel");
+    var current = STYLES[0];
+    var themeMode = "auto";
+
+    // přepínače stylů
+    STYLES.forEach(function (s) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "styletab";
+      b.dataset.slug = s.slug;
+      b.setAttribute("aria-pressed", s.slug === current.slug ? "true" : "false");
+      var sw = '<span class="sw">' + s.sw.slice(0, 4).map(function (c) {
+        return '<i style="background:' + c + '"></i>';
+      }).join("") + "</span>";
+      b.innerHTML = sw + "<span>" + s.name + "</span>";
+      b.addEventListener("click", function () { apply(s.slug); });
+      tabs.appendChild(b);
+    });
+
+    function apply(slug) {
+      current = STYLES.filter(function (s) { return s.slug === slug; })[0];
+      preview.dataset.style = slug;
+
+      tabs.querySelectorAll(".styletab").forEach(function (b) {
+        b.setAttribute("aria-pressed", b.dataset.slug === slug ? "true" : "false");
+      });
+
+      document.getElementById("idSlug").textContent = current.slug;
+      document.getElementById("idName").textContent = current.name;
+      var caution = document.getElementById("idCaution");
+      caution.textContent = current.caution || "";
+      caution.hidden = !current.caution;
+
+      document.getElementById("idLede").textContent = current.lede;
+      document.getElementById("idUse").textContent = current.use;
+      document.getElementById("spFont").textContent = current.font;
+      document.getElementById("spData").textContent = current.data;
+      document.getElementById("spRadius").textContent = current.radius;
+      document.getElementById("spRow").textContent = current.row;
+      document.getElementById("spSize").textContent = current.size;
+      document.getElementById("spZebra").textContent = current.zebra;
+      document.getElementById("spDensity").textContent =
+        Math.floor(500 / parseInt(current.row, 10)) + " řádků";
+
+      var sws = document.getElementById("idSwatches");
+      sws.innerHTML = current.sw.map(function (c) {
+        return '<figure><div class="chip" style="background:' + c + '"></div><figcaption>' + c + "</figcaption></figure>";
+      }).join("");
+
+      updateLabel();
+    }
+
+    function updateLabel() {
+      var mode = themeMode === "auto"
+        ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "tmavý (podle systému)" : "světlý (podle systému)")
+        : (themeMode === "dark" ? "tmavý" : "světlý");
+      frameLabel.textContent = current.slug + " — " + mode + " režim";
+    }
+
+    // přepínač režimu
+    document.querySelectorAll("[data-theme-set]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        themeMode = b.dataset.themeSet;
+        document.querySelectorAll("[data-theme-set]").forEach(function (o) {
+          o.setAttribute("aria-pressed", o === b ? "true" : "false");
+        });
+        if (themeMode === "auto") document.documentElement.removeAttribute("data-theme");
+        else document.documentElement.setAttribute("data-theme", themeMode);
+        updateLabel();
+      });
+    });
+
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", updateLabel);
+
+    // výběr řádku v náhledu
+    document.getElementById("tbody").addEventListener("click", function (e) {
+      var row = e.target.closest("tr");
+      if (!row) return;
+      this.querySelectorAll("tr").forEach(function (r) { r.dataset.sel = "false"; });
+      row.dataset.sel = "true";
+    });
+
+    apply("ops-steel");
+    window.__applyStyle = apply;
+  })();
+</script>
+
+<script>
+  /* ==========================================================================
+     GRAFY
+     Barvy dat jsou v CSS proměnných, značky nesou třídy — při přepnutí režimu
+     se tedy nic nepřekresluje. Překresluje se jen při změně šířky nebo stylu,
+     protože se mění metrika písma a tím i potřebné odsazení.
+     ========================================================================== */
+  (function () {
+    var MONTHS = ["led", "úno", "bře", "dub", "kvě", "čvn", "čvc", "srp"];
+    var PAID = [26040, 26040, 24790, 26040, 27290, 25040, 24790, 26081];
+    var PLAN = 26040;
+
+    var COSTS = [
+      ["Teplo a TUV", 96400],
+      ["Elektřina společné", 28900],
+      ["Vodné a stočné", 24300],
+      ["Úklid a údržba", 18600],
+      ["Opravy a revize", 14200],
+      ["Správa a pojištění", 9800]
+    ];
+
+    var SALDO = [
+      ["Nováková J.", 1240], ["Svobodová M.", 860], ["Dvořák T.", 410],
+      ["Horáková A.", 120], ["Pokorná L.", -180], ["Beneš R.", -640],
+      ["Marek J.", -1350], ["Kučera P.", -2480]
+    ];
+
+    var NS = "http://www.w3.org/2000/svg";
+    var tip = document.getElementById("vizTip");
+
+    function fmt(n) { return Math.round(Math.abs(n)).toLocaleString("cs-CZ"); }
+    function signed(n) { return (n > 0 ? "+" : n < 0 ? "−" : "") + fmt(n); }
+
+    function el(tag, attrs) {
+      var e = document.createElementNS(NS, tag);
+      for (var k in attrs) if (attrs[k] !== null && attrs[k] !== undefined) e.setAttribute(k, attrs[k]);
+      return e;
+    }
+    function txt(e, s) { e.textContent = s; return e; }
+
+    /* zaoblená datová hrana, hranatá pata */
+    function barPath(x, y, w, h, r, dir) {
+      r = Math.max(0, Math.min(r, w / 2, h / 2));
+      if (dir === "up") {
+        return "M" + x + "," + (y + h) + "L" + x + "," + (y + r) +
+               "Q" + x + "," + y + " " + (x + r) + "," + y +
+               "L" + (x + w - r) + "," + y +
+               "Q" + (x + w) + "," + y + " " + (x + w) + "," + (y + r) +
+               "L" + (x + w) + "," + (y + h) + "Z";
+      }
+      if (dir === "right") {
+        return "M" + x + "," + y + "L" + (x + w - r) + "," + y +
+               "Q" + (x + w) + "," + y + " " + (x + w) + "," + (y + r) +
+               "L" + (x + w) + "," + (y + h - r) +
+               "Q" + (x + w) + "," + (y + h) + " " + (x + w - r) + "," + (y + h) +
+               "L" + x + "," + (y + h) + "Z";
+      }
+      return "M" + (x + w) + "," + y + "L" + (x + r) + "," + y +
+             "Q" + x + "," + y + " " + x + "," + (y + r) +
+             "L" + x + "," + (y + h - r) +
+             "Q" + x + "," + (y + h) + " " + (x + r) + "," + (y + h) +
+             "L" + (x + w) + "," + (y + h) + "Z";
+    }
+
+    function hit(svg, x, y, w, h, label) {
+      var r = el("rect", { x: x, y: y, width: Math.max(w, 1), height: Math.max(h, 1), class: "viz-hit" });
+      r.setAttribute("data-tip", label);
+      svg.appendChild(r);
+    }
+
+    function clear(svg) { while (svg.firstChild) svg.removeChild(svg.firstChild); }
+
+    /* ---------- 1) sloupce + referenční čára ---------- */
+    function chart1() {
+      var svg = document.getElementById("ch1");
+      var w = svg.parentNode.clientWidth || 600;
+      var h = 186;
+      clear(svg);
+      svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+      svg.setAttribute("height", h);
+
+      var padL = 52, padR = 16, padT = 14, padB = 22;
+      var pw = Math.max(40, w - padL - padR), ph = h - padT - padB;
+      var max = 30000;
+      var ticks = [0, 10000, 20000, 30000];
+      var y = function (v) { return padT + ph * (1 - v / max); };
+
+      ticks.forEach(function (t) {
+        svg.appendChild(el("line", { x1: padL, y1: y(t), x2: padL + pw, y2: y(t), class: t === 0 ? "viz-axis" : "viz-grid" }));
+        svg.appendChild(txt(el("text", { x: padL - 8, y: y(t) + 3.5, "text-anchor": "end", class: "viz-tick" }), fmt(t)));
+      });
+
+      var band = pw / PAID.length;
+      var bw = Math.min(24, band - 2);
+
+      PAID.forEach(function (v, i) {
+        var cx = padL + band * i + band / 2;
+        var x = cx - bw / 2;
+        var top = y(v);
+        svg.appendChild(el("path", { d: barPath(x, top, bw, y(0) - top, 4, "up"), class: "viz-b1" }));
+        svg.appendChild(txt(el("text", { x: cx, y: h - 7, "text-anchor": "middle", class: "viz-tick" }), MONTHS[i]));
+        hit(svg, cx - band / 2, padT, band, ph, MONTHS[i] + " · uhrazeno " + fmt(v) + " Kč");
+      });
+
+      /* předpis jako referenční čára — druhá série, proto je v legendě */
+      svg.appendChild(el("line", { x1: padL, y1: y(PLAN), x2: padL + pw, y2: y(PLAN), class: "viz-ref" }));
+
+      /* jediný přímý popisek: poslední sloupec */
+      var last = PAID.length - 1;
+      svg.appendChild(txt(el("text", {
+        x: padL + band * last + band / 2, y: y(PAID[last]) - 7,
+        "text-anchor": "middle", class: "viz-val"
+      }), fmt(PAID[last])));
+
+      table("tb1", ["Měsíc", "Uhrazeno (Kč)", "Předpis (Kč)"],
+        PAID.map(function (v, i) { return [MONTHS[i], fmt(v), fmt(PLAN)]; }), [false, true, true]);
+    }
+
+    /* ---------- 2) vodorovné sloupce, jedna série = jedna barva ---------- */
+    function chart2() {
+      var svg = document.getElementById("ch2");
+      var w = svg.parentNode.clientWidth || 320;
+      clear(svg);
+      var padL = 124, padR = 58, padT = 4, rowH = 27;
+      var h = COSTS.length * rowH + padT + 4;
+      svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+      svg.setAttribute("height", h);
+
+      var pw = Math.max(30, w - padL - padR);
+      var max = 96400;
+      var bh = Math.min(24, rowH - 9);
+
+      COSTS.forEach(function (row, i) {
+        var yTop = padT + rowH * i + (rowH - bh) / 2;
+        var bw = pw * (row[1] / max);
+        svg.appendChild(el("path", { d: barPath(padL, yTop, bw, bh, 4, "right"), class: "viz-b1" }));
+        svg.appendChild(txt(el("text", { x: padL - 9, y: yTop + bh / 2 + 3.5, "text-anchor": "end", class: "viz-cat" }), row[0]));
+        svg.appendChild(txt(el("text", { x: padL + bw + 7, y: yTop + bh / 2 + 3.5, class: "viz-val" }), fmt(row[1])));
+        hit(svg, padL, padT + rowH * i, pw, rowH, row[0] + " · " + fmt(row[1]) + " Kč");
+      });
+
+      svg.appendChild(el("line", { x1: padL, y1: padT, x2: padL, y2: padT + rowH * COSTS.length, class: "viz-axis" }));
+
+      table("tb2", ["Kategorie", "Náklad (Kč)"],
+        COSTS.map(function (r) { return [r[0], fmt(r[1])]; }), [false, true]);
+    }
+
+    /* ---------- 3) rozbíhavé sloupce kolem nuly ---------- */
+    function chart3() {
+      var svg = document.getElementById("ch3");
+      var w = svg.parentNode.clientWidth || 320;
+      clear(svg);
+      var padL = 104, padR = 52, padT = 4, rowH = 24;
+      var h = SALDO.length * rowH + padT + 4;
+      svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+      svg.setAttribute("height", h);
+
+      var pw = Math.max(30, w - padL - padR);
+      var extent = 2480;                  /* symetrická osa, aby ramena byla souměrná */
+      var mid = padL + pw / 2;
+      var bh = Math.min(24, rowH - 8);
+
+      SALDO.forEach(function (row, i) {
+        var v = row[1];
+        var yTop = padT + rowH * i + (rowH - bh) / 2;
+        var len = (pw / 2) * (Math.abs(v) / extent);
+        var pos = v >= 0;
+        var x = pos ? mid : mid - len;
+        svg.appendChild(el("path", {
+          d: barPath(x, yTop, len, bh, 4, pos ? "right" : "left"),
+          class: pos ? "viz-bp" : "viz-bn"
+        }));
+        svg.appendChild(txt(el("text", { x: padL - 9, y: yTop + bh / 2 + 3.5, "text-anchor": "end", class: "viz-cat" }), row[0]));
+        svg.appendChild(txt(el("text", {
+          x: pos ? mid + len + 7 : mid - len - 7,
+          y: yTop + bh / 2 + 3.5,
+          "text-anchor": pos ? "start" : "end",
+          class: "viz-val"
+        }), signed(v)));
+        hit(svg, padL, padT + rowH * i, pw, rowH,
+          row[0] + " · " + (pos ? "přeplatek " : "nedoplatek ") + fmt(v) + " Kč");
+      });
+
+      svg.appendChild(el("line", { x1: mid, y1: padT, x2: mid, y2: padT + rowH * SALDO.length, class: "viz-axis" }));
+
+      table("tb3", ["Osoba", "Saldo (Kč)"],
+        SALDO.map(function (r) { return [r[0], signed(r[1])]; }), [false, true]);
+    }
+
+    /* ---------- jiskrový graf v dlaždici ---------- */
+    function spark() {
+      var svg = document.getElementById("spark1");
+      var w = svg.parentNode.clientWidth || 160;
+      var h = 34;
+      clear(svg);
+      svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+
+      var pad = 6, lo = 24000, hi = 28000;
+      var stepX = (w - pad * 2) / (PAID.length - 1);
+      var pts = PAID.map(function (v, i) {
+        return [pad + stepX * i, pad + (h - pad * 2) * (1 - (v - lo) / (hi - lo))];
+      });
+      svg.appendChild(el("path", {
+        d: "M" + pts.map(function (p) { return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join("L"),
+        class: "viz-sparkline"
+      }));
+      var end = pts[pts.length - 1];
+      svg.appendChild(el("circle", { cx: end[0], cy: end[1], r: 4, class: "viz-sparkdot" }));
+    }
+
+    /* ---------- dvojče v tabulce ---------- */
+    function table(id, head, rows, numeric) {
+      var host = document.getElementById(id);
+      var html = "<table><thead><tr>" + head.map(function (c, i) {
+        return '<th' + (numeric[i] ? ' style="text-align:right"' : "") + ">" + c + "</th>";
+      }).join("") + "</tr></thead><tbody>";
+      rows.forEach(function (r) {
+        html += "<tr>" + r.map(function (c, i) {
+          return "<td" + (numeric[i] ? ' class="num"' : "") + ">" + c + "</td>";
+        }).join("") + "</tr>";
+      });
+      host.innerHTML = html + "</tbody></table>";
+    }
+
+    function renderAll() {
+      if (document.getElementById("chartsView").hidden) return;
+      spark(); chart1(); chart2(); chart3();
+    }
+
+    /* bublina — doplňuje hodnoty, nikdy jako jediná cesta k nim */
+    var charts = document.getElementById("chartsView");
+    charts.addEventListener("mouseover", function (e) {
+      var t = e.target.getAttribute && e.target.getAttribute("data-tip");
+      if (!t) return;
+      var parts = t.split(" · ");
+      tip.innerHTML = parts[0] + (parts[1] ? "<br><b>" + parts[1] + "</b>" : "");
+      tip.hidden = false;
+      var box = charts.getBoundingClientRect();
+      tip.style.left = (e.clientX - box.left) + "px";
+      tip.style.top = (e.clientY - box.top - 10 + charts.scrollTop) + "px";
+    });
+    charts.addEventListener("mouseout", function (e) {
+      if (e.target.getAttribute && e.target.getAttribute("data-tip")) tip.hidden = true;
+    });
+
+    /* přepínač obrazovky */
+    var VIEWS = {
+      table: { title: "Úhrady z Fio", meta: "10 pohybů · 26 081 Kč", btn: "Stáhnout z banky",
+               tb: "naposledy 2026-08-20 12:45:46 — staženo 3 pohyby za 2026-08-06 až 2026-08-20" },
+      charts: { title: "Vyúčtování 2026", meta: "8 měsíců · 12 osob", btn: "Exportovat do PDF",
+                tb: "podklady k 2026-08-20 — uzávěrka zatím neproběhla" }
+    };
+
+    document.querySelectorAll("[data-view-set]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var v = b.dataset.viewSet;
+        document.querySelectorAll("[data-view-set]").forEach(function (o) {
+          o.setAttribute("aria-pressed", o === b ? "true" : "false");
+        });
+        document.getElementById("tableView").hidden = v !== "table";
+        document.getElementById("chartsView").hidden = v !== "charts";
+        document.getElementById("paneTitle").textContent = VIEWS[v].title;
+        document.getElementById("paneMeta").textContent = VIEWS[v].meta;
+        document.getElementById("tbBtn").textContent = VIEWS[v].btn;
+        document.getElementById("tbMeta").textContent = VIEWS[v].tb;
+        tip.hidden = true;
+        renderAll();
+      });
+    });
+
+    /* překreslit při změně šířky i stylu — mění se metrika písma */
+    var raf;
+    function schedule() { cancelAnimationFrame(raf); raf = requestAnimationFrame(renderAll); }
+    window.addEventListener("resize", schedule);
+    new MutationObserver(schedule).observe(document.getElementById("preview"), {
+      attributes: true, attributeFilter: ["data-style"]
+    });
+    document.querySelectorAll("details.viz-table").forEach(function (d) {
+      d.addEventListener("toggle", schedule);
+    });
+
+    renderAll();
+  })();
+</script>
+</body>
+</html>
+
