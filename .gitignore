@@ -9,3 +9,11 @@ dist/
 .idea/
 Thumbs.db
 desktop.ini
+
+# Stažené knihovny — do repozitáře nepatří, obnoví je scripts/fetch-vendor.mjs
+vendor/
+
+# Palety odvozené ze stažených schémat — obnoví je scripts/build-tokens.mjs.
+# Přehled s verdikty (bank/tokens/index.json) commitnutý zůstává, aby šlo
+# vybírat i bez stahování.
+bank/tokens/scheme/

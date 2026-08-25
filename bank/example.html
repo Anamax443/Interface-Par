@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Banka UI — ukázka použití</title>
+
+<!-- Takhle se banka zapojí. Tři soubory, žádný build krok.
+     1. písma (nepovinné, ale bez nich se kreslí náhrada a mění se metrika)
+     2. tokeny JEDNOHO stylu — vyměň soubor a je jiný vzhled
+     3. vrstva komponent -->
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="tokens/style/ops-steel.css">
+<link rel="stylesheet" href="ui.css">
+
+<style>
+  /* Jen rám téhle ukázky. Do projektu tohle nepatří. */
+  body { margin: 0; font: 13px "Segoe UI", system-ui, sans-serif; background: #eef0f3; color: #16191c; }
+  @media (prefers-color-scheme: dark) { body { background: #101317; color: #e3e7ea; } }
+  .demo { max-width: 1200px; margin: 0 auto; padding: 18px 16px 40px; }
+  .demo h1 { font-size: 17px; margin: 0 0 4px; }
+  .demo p { margin: 0 0 14px; opacity: .75; max-width: 74ch; }
+  .demo code { font-family: "Cascadia Mono", Consolas, monospace; font-size: .92em; }
+  .demo select { font: inherit; padding: 3px 6px; }
+  .bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+  /* Banka nemá vlastní výšku — dostane ji od místa, kam ji dáš. */
+  .ui { height: 460px; border: 1px solid rgba(128,128,128,.4); }
+</style>
+</head>
+<body>
+<div class="demo">
+  <h1>Banka UI — ukázka použití</h1>
+  <p>
+    Jeden markup, jedna vrstva komponent. Styl se mění výměnou souboru
+    <code>tokens/style/*.css</code>, rozvržení atributem <code>data-layout</code>.
+    Přepínače dole jsou jen kvůli téhle ukázce — v aplikaci si vybereš jedno a hotovo.
+  </p>
+
+  <div class="bar">
+    <label>Styl <select id="styleSel"></select></label>
+    <label>Rozvržení
+      <select id="laySel">
+        <option value="side-nav">boční panel</option>
+        <option value="top-tabs">horní menu</option>
+        <option value="rail">úzká lišta</option>
+        <option value="master-detail">seznam + detail</option>
+        <option value="split-console">mřížka + konzole</option>
+      </select>
+    </label>
+  </div>
+
+  <!-- Kostra. Třídy p-* nese vrstva komponent, tokeny jen barví a měří. -->
+  <div class="ui" id="ui" data-layout="side-nav">
+    <div class="p-title">
+      <span class="p-brand"><span class="mark"></span>Nástroj<span class="sub">— ukázka</span></span>
+      <span class="vsep"></span>
+      <span class="p-field">Období: srpen 2026</span>
+      <span class="grow"></span>
+      <span class="p-field">14 záznamů</span>
+    </div>
+
+    <nav class="p-topnav" id="topnav" aria-label="Hlavní nabídka"></nav>
+
+    <nav class="p-nav" id="nav">
+      <button class="p-navitem" type="button" title="Přehled"><span class="lbl">Přehled</span></button>
+      <button class="p-navitem" type="button" aria-current="true" title="Zařízení"><span class="lbl">Zařízení</span></button>
+      <button class="p-navitem" type="button" title="Služby"><span class="lbl">Služby</span></button>
+      <button class="p-navitem" type="button" title="Porty a dostupnost"><span class="lbl">Porty a dostupnost</span></button>
+      <div class="p-navsec">Správa</div>
+      <button class="p-navitem" type="button" title="Nastavení"><span class="lbl">Nastavení</span></button>
+    </nav>
+
+    <main class="p-main">
+      <div class="p-panehead"><span>Zařízení</span><span class="n">5 z 14 · 1 nedostupné</span></div>
+      <div class="p-toolbar">
+        <button class="p-btn" type="button">Načíst znovu</button>
+        <span class="vsep"></span>
+        <span class="meta">naposledy 2026-08-25 09:12:04</span>
+      </div>
+      <div class="p-gridwrap">
+        <table class="p-table">
+          <thead>
+            <tr><th class="c-date">Poslední kontakt</th><th class="c-vs">IP</th><th>Název a poznámka</th><th class="c-to">Lokalita</th><th class="c-state">Stav</th></tr>
+          </thead>
+          <tbody id="tbody">
+            <tr data-sel="true"><td class="c-date">09:12:04</td><td class="c-vs">10.0.0.14</td><td>PC-014 <span class="dim">— účtárna, druhé patro</span></td><td>Pobočka A</td><td class="st-ok"><span class="p-state"><span class="p-dot"></span>Online</span></td></tr>
+            <tr><td class="c-date">09:12:03</td><td class="c-vs">10.0.0.21</td><td>TISK-02 <span class="dim">— chodba</span></td><td>Pobočka A</td><td class="st-ok"><span class="p-state"><span class="p-dot"></span>Online</span></td></tr>
+            <tr><td class="c-date">08:47:11</td><td class="c-vs">10.0.1.7</td><td>PC-107 <span class="dim">— sklad</span></td><td>Pobočka B</td><td class="st-warn"><span class="p-state"><span class="p-dot"></span>Odezva 240 ms</span></td></tr>
+            <tr><td class="c-date">06:03:52</td><td class="c-vs">10.0.1.9</td><td>NAS-01 <span class="dim">— zálohy</span></td><td>Pobočka B</td><td class="st-crit"><span class="p-state"><span class="p-dot"></span>Nedostupné</span></td></tr>
+            <tr><td class="c-date">09:11:58</td><td class="c-vs">10.0.2.3</td><td>SRV-DC1</td><td>Centrála</td><td class="st-ok"><span class="p-state"><span class="p-dot"></span>Online</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <aside class="p-detail" id="detail">
+      <div class="dhead">Detail zařízení</div>
+      <dl id="detailBody"></dl>
+    </aside>
+
+    <section class="p-console">
+      <div class="chead">Průběh kontroly</div>
+      <pre class="clog"><span>09:12:01</span> <b>sken 10.0.0.0/24</b>
+<span>09:12:03</span> <b>odpovědělo 12 z 14</b>
+<span>09:12:04</span> <b>NAS-01 neodpovídá — 3. pokus</b>
+<span>09:12:04</span> <b>hotovo</b></pre>
+    </section>
+
+    <footer class="p-status">
+      <span><b>14</b> zařízení</span>
+      <span><b>12</b> online</span>
+      <span><b>1</b> pomalé</span>
+      <span><b>1</b> nedostupné</span>
+      <span class="grow"></span>
+      <span>Sběr běží</span>
+    </footer>
+  </div>
+</div>
+
+<script>
+  // Vodorovné menu se klonuje z bočního — položky mají jediný zdroj.
+  (function () {
+    var topnav = document.getElementById('topnav');
+    Array.prototype.forEach.call(document.getElementById('nav').children, function (el) {
+      if (el.classList.contains('p-navsec')) {
+        var sep = document.createElement('span');
+        sep.className = 'p-navsep';
+        topnav.appendChild(sep);
+        return;
+      }
+      topnav.appendChild(el.cloneNode(true));
+    });
+  })();
+
+  // Detail se plní z vybraného řádku.
+  var HEADS = ['Poslední kontakt', 'IP', 'Název a poznámka', 'Lokalita', 'Stav'];
+  function fillDetail(row) {
+    if (!row) return;
+    document.getElementById('detailBody').innerHTML =
+      Array.prototype.map.call(row.cells, function (td, i) {
+        return '<dt>' + HEADS[i] + '</dt><dd>' + (td.textContent.trim() || '—') + '</dd>';
+      }).join('');
+  }
+  document.getElementById('tbody').addEventListener('click', function (e) {
+    var row = e.target.closest('tr');
+    if (!row) return;
+    this.querySelectorAll('tr').forEach(function (r) { r.dataset.sel = 'false'; });
+    row.dataset.sel = 'true';
+    fillDetail(row);
+  });
+  fillDetail(document.querySelector('#tbody tr[data-sel="true"]'));
+
+  // Přepínače ukázky. Styl se v aplikaci mění výměnou <link>, tady kvůli
+  // porovnání přepisujeme href.
+  var STYLES = ['ops-steel','carbon-grid','fluent-win','console-dark','paper-doc','ledger-mono',
+    'blueprint-dense','swiss-rule','nord-calm','zinc-mute','contrast-a11y','winbox-95','turbo-tui',
+    'hmi-slate','ticker-black','solar-parchment','mono-brutal','gruvbox-warm','catppuccin-soft',
+    'tokyo-night','admin-common','saas-modern','vivid-gradient'];
+  var sel = document.getElementById('styleSel');
+  STYLES.forEach(function (s) {
+    var o = document.createElement('option');
+    o.value = o.textContent = s;
+    sel.appendChild(o);
+  });
+  var link = document.querySelector('link[href^="tokens/style/"]');
+  sel.addEventListener('change', function () {
+    link.href = 'tokens/style/' + sel.value + '.css';
+    document.getElementById('ui').dataset.style = sel.value;
+  });
+  document.getElementById('ui').dataset.style = 'ops-steel';
+  document.getElementById('laySel').addEventListener('change', function () {
+    document.getElementById('ui').dataset.layout = this.value;
+  });
+</script>
+</body>
+</html>

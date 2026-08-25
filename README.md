@@ -14,9 +14,38 @@ a rozbor, kdy se vyplatí sáhnout po komponentové knihovně a kdy ne.
 | [`mockup/git-nastenka-shell.html`](mockup/git-nastenka-shell.html) | Původní mockup kostry — sidebar, toolbar, hustý grid, stavový řádek. |
 | [`docs/styly.md`](docs/styly.md) | Popis všech stylů, jak jsou postavené, pravidla pro grafy a barvy dat. |
 | [`docs/rozhovor.md`](docs/rozhovor.md) | Průběh návrhu: zadání, zvažované varianty, rozbor React + MUI, doporučení. |
+| [`bank/`](bank/README.md) | **Banka UI** — to, co se z katalogu opravdu použije. Vrstva komponent, tokeny 23 stylů, palety z 533 schémat, vendorovaná písma. |
 
 Obojí jsou samostatné soubory bez závislostí a bez build kroku — otevři je
 v prohlížeči, nebo je naservíruj jak jsou.
+
+## Katalog vybírá, banka se používá
+
+Katalog je showroom: přepínáš v něm styl a rozvržení a porovnáváš. Do projektu
+se pak vloží [`bank/`](bank/README.md) — tři soubory CSS a jeden atribut, žádný
+build krok:
+
+```html
+<link rel="stylesheet" href="bank/fonts.css">
+<link rel="stylesheet" href="bank/tokens/style/ops-steel.css">
+<link rel="stylesheet" href="bank/ui.css">
+<div class="ui" data-layout="top-tabs"> … </div>
+```
+
+Banka se **generuje z katalogu**, ne píše ručně — jinak by se do týdne rozešly
+a nikdo by si toho nevšiml.
+
+### Knihovny se stahují do projektu
+
+```
+node scripts/fetch-vendor.mjs     # písma + 533 barevných schémat → vendor/
+node scripts/build-tokens.mjs     # schémata → bank/tokens/scheme/
+node scripts/build-bank.mjs       # katalog  → bank/ui.css + tokens/style/
+```
+
+Node 18+, žádné `npm install`, žádné CDN za běhu. Aplikace běží ve vnitřní síti
+a písmo, které se nenačte, mění metriku celého rozhraní — proto vlastní kopie.
+Cascadia Mono i Inter jsou pod SIL OFL 1.1.
 
 ## K čemu to je
 
