@@ -242,6 +242,7 @@
   .verdict.pass { color: #2f7d4c; }
   .verdict.warn { color: #9a6412; }
   .verdict.fail { color: #a63a2e; }
+  .verdict.skip { color: var(--g-faint); font-weight: 400; }
   @media (prefers-color-scheme: dark) {
     .verdict.pass { color: #63ac72; } .verdict.warn { color: #c99a3a; } .verdict.fail { color: #dc6b60; }
   }
@@ -1020,6 +1021,10 @@
      4. APLIKACE — jediný markup, mění se jen tokeny
      ========================================================================== */
 
+  /* Rozvrzeni je druha, nezavisla osa: styl meni tokeny, rozvrzeni meni
+     kostru okna. Obsah je v obou pripadech tentyz -- vodorovne menu se
+     naklonuje z bocniho, detail i konzole jsou v markupu vzdy a jen se
+     odkryvaji. Diky tomu neexistuje druhy zdroj pravdy o polozkach menu. */
   .preview {
     height: 540px;
     display: grid;
@@ -1206,6 +1211,134 @@
 
   [hidden] { display: none !important; }
 
+  /* --- vodorovne menu (rozvrzeni bez bocniho panelu) --- */
+  .p-topnav {
+    grid-area: n;
+    display: none;
+    align-items: center;
+    gap: 2px;
+    padding: 0 6px;
+    background: var(--chrome);
+    border-bottom: var(--border-w) solid var(--border);
+    /* Na uzsim okne se zalozky nevejdou a objevi se posuvnik. Ten si ukousne
+       kus vysky, takze pas nesmi mit vysku pevne danou -- jinak se do nej
+       zalozka prestane vejit. Rada v mrizce je proto `auto` a tady je jen
+       spodni mez. */
+    min-height: var(--nav-h);
+    overflow-x: auto;
+  }
+  .p-topnav .p-navitem {
+    width: auto; flex: none;
+    height: var(--nav-h);
+    padding: 0 12px;
+    border-radius: 0;
+    /* Zalozka se hlasi spodni hranou, ne plochou -- plocha uz nese vyber
+       radku v tabulce a dve stejne vyznamy se pletou. */
+    box-shadow: none;
+  }
+  .p-topnav .p-navitem[aria-current="true"] {
+    background: var(--pane);
+    box-shadow: inset 0 calc(-1 * var(--sel-bar, 2px)) 0 var(--accent);
+  }
+  .p-topnav .p-navsep { width: 1px; align-self: center; height: 60%; background: var(--border); margin: 0 4px; }
+
+  /* --- detailni panel (rozvrzeni seznam + detail) --- */
+  .p-detail {
+    grid-area: d;
+    display: none;
+    flex-direction: column;
+    min-width: 0;
+    background: var(--pane);
+    border-left: var(--border-w) solid var(--border);
+  }
+  .p-detail .dhead {
+    display: flex; align-items: center; gap: 8px;
+    height: var(--panehead-h); padding: 0 11px;
+    background: var(--accsoft);
+    border-bottom: var(--border-w) solid var(--border);
+    font-family: var(--font-display); font-weight: 650;
+  }
+  .p-detail dl { margin: 0; padding: 10px 12px; overflow: auto; }
+  .p-detail dt {
+    color: var(--dim); font-size: calc(var(--fs-ui) - 1.5px);
+    margin-top: 9px;
+  }
+  .p-detail dt:first-child { margin-top: 0; }
+  .p-detail dd {
+    margin: 1px 0 0;
+    font-family: var(--font-data); font-size: var(--fs-data);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* --- spodni konzole (rozvrzeni mrizka + log) --- */
+  .p-console {
+    grid-area: c;
+    display: none;
+    flex-direction: column;
+    min-height: 0;
+    background: var(--pane);
+    border-top: var(--border-w) solid var(--border);
+  }
+  .p-console .chead {
+    display: flex; align-items: center; gap: 8px;
+    height: var(--panehead-h); padding: 0 11px;
+    background: var(--chromehi);
+    border-bottom: var(--border-w) solid var(--bordersoft);
+    font-weight: 650; font-size: calc(var(--fs-ui) - .5px);
+  }
+  .p-console .clog {
+    margin: 0; padding: 7px 11px; overflow: auto; flex: 1;
+    font-family: var(--font-data); font-size: var(--fs-data); line-height: 1.5;
+  }
+  .p-console .clog span { color: var(--dim); }
+  .p-console .clog b { font-weight: 400; color: var(--text); }
+
+  /* ==========================================================================
+     ROZVRZENI
+     ========================================================================== */
+
+  /* bocni panel -- vychozi, definovano vyse */
+
+  /* horni menu: bez bocniho panelu, cela sirka pro data */
+  .preview[data-layout="top-tabs"] {
+    grid-template-columns: 1fr;
+    grid-template-rows: var(--title-h) auto 1fr var(--status-h);
+    grid-template-areas: "t" "n" "m" "s";
+  }
+  .preview[data-layout="top-tabs"] .p-nav { display: none; }
+  .preview[data-layout="top-tabs"] .p-topnav { display: flex; }
+
+  /* uzka lista: jen ikony, popisek nese title */
+  .preview[data-layout="rail"] { grid-template-columns: 44px 1fr; }
+  .preview[data-layout="rail"] .p-nav { padding: 5px 4px; }
+  .preview[data-layout="rail"] .p-navitem { justify-content: center; padding: 0; }
+  .preview[data-layout="rail"] .p-navitem .lbl { display: none; }
+  .preview[data-layout="rail"] .p-navsec {
+    padding: 10px 0 4px; text-align: center; font-size: 9px; letter-spacing: 0;
+  }
+
+  /* seznam + detail: vybrany radek ma vlastni panel vpravo */
+  .preview[data-layout="master-detail"] {
+    grid-template-columns: 186px 1fr 252px;
+    grid-template-areas: "t t t" "n m d" "s s s";
+  }
+  .preview[data-layout="master-detail"] .p-detail { display: flex; }
+
+  /* mrizka + konzole: prubeh ulohy je videt zaroven s daty */
+  .preview[data-layout="split-console"] {
+    grid-template-rows: var(--title-h) 1fr 132px var(--status-h);
+    grid-template-areas: "t t" "n m" "n c" "s s";
+  }
+  .preview[data-layout="split-console"] .p-console { display: flex; }
+
+  @media (max-width: 760px) {
+    .preview[data-layout="master-detail"] {
+      grid-template-columns: 186px 1fr;
+      grid-template-areas: "t t" "n m" "s s";
+    }
+    .preview[data-layout="master-detail"] .p-detail { display: none; }
+  }
+
   /* ==========================================================================
      5. GRAFY
      Marks podle specifikace: sloupce ≤24 px se zaoblenou datovou hranou a
@@ -1358,6 +1491,13 @@
   <div class="controls">
     <div class="styletabs" id="tabs" role="group" aria-label="Vizuální styl"></div>
     <span class="grow"></span>
+    <div class="themeswitch" role="group" aria-label="Rozvržení" id="layoutswitch">
+      <button type="button" data-layout-set="side-nav" aria-pressed="true">Boční panel</button>
+      <button type="button" data-layout-set="top-tabs" aria-pressed="false">Horní menu</button>
+      <button type="button" data-layout-set="rail" aria-pressed="false">Úzká lišta</button>
+      <button type="button" data-layout-set="master-detail" aria-pressed="false">Seznam + detail</button>
+      <button type="button" data-layout-set="split-console" aria-pressed="false">Mřížka + konzole</button>
+    </div>
     <div class="themeswitch" role="group" aria-label="Obrazovka">
       <button type="button" data-view-set="table" aria-pressed="true">Tabulka</button>
       <button type="button" data-view-set="charts" aria-pressed="false">Grafy</button>
@@ -1399,7 +1539,7 @@
       <span id="frameLabel">ops-steel — světlý režim</span>
     </div>
 
-    <div class="preview" id="preview" data-style="ops-steel">
+    <div class="preview" id="preview" data-style="ops-steel" data-layout="side-nav">
 
       <div class="p-title">
         <span class="p-brand"><span class="mark"></span>FIO-úhrady<span class="sub">— Hostěrádky 213</span></span>
@@ -1408,6 +1548,8 @@
         <span class="grow"></span>
         <span class="p-field">Účet 2301234567/2010</span>
       </div>
+
+      <nav class="p-topnav" id="topnav" aria-label="Hlavní nabídka"></nav>
 
       <nav class="p-nav">
         <button class="p-navitem" type="button" title="Přehled"><svg class="icon"><use href="#s-grid"/></svg><span class="lbl">Přehled</span></button>
@@ -1518,6 +1660,21 @@
           <div class="viz-tip" id="vizTip" hidden></div>
         </div>
       </main>
+
+      <aside class="p-detail" id="detail">
+        <div class="dhead"><svg class="icon icon-sm"><use href="#s-doc"/></svg>Detail pohybu</div>
+        <dl id="detailBody"></dl>
+      </aside>
+
+      <section class="p-console">
+        <div class="chead"><svg class="icon icon-sm"><use href="#s-refresh"/></svg>Průběh stahování</div>
+        <pre class="clog"><span>12:45:41</span> <b>připojeno k Fio API</b>
+<span>12:45:42</span> <b>období 2026-08-06 až 2026-08-20</b>
+<span>12:45:44</span> <b>staženo 3 pohyby</b>
+<span>12:45:45</span> <b>spárováno 2 podle VS</b>
+<span>12:45:46</span> <b>1 pohyb bez VS — čeká na ruční přiřazení</b>
+<span>12:45:46</span> <b>hotovo</b></pre>
+      </section>
 
       <footer class="p-status">
         <span><b>10</b> pohybů</span>
@@ -1913,7 +2070,12 @@
       var mode = themeMode === "auto"
         ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "tmavý (podle systému)" : "světlý (podle systému)")
         : (themeMode === "dark" ? "tmavý" : "světlý");
-      frameLabel.textContent = current.slug + " — " + mode + " režim";
+      var LAY = {
+        "side-nav": "boční panel", "top-tabs": "horní menu", "rail": "úzká lišta",
+        "master-detail": "seznam + detail", "split-console": "mřížka + konzole"
+      };
+      frameLabel.textContent = current.slug + " — " + LAY[preview.dataset.layout || "side-nav"]
+        + " — " + mode + " režim";
     }
 
     // přepínač režimu
@@ -1931,16 +2093,74 @@
 
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", updateLabel);
 
-    // výběr řádku v náhledu
+    // vyber radku v nahledu + naplneni detailu
+    var HEADS = ["Datum", "Částka", "VS", "Plátce a poznámka", "Přiřazeno k", "Stav"];
+    function fillDetail(row) {
+      var body = document.getElementById("detailBody");
+      if (!body || !row) return;
+      body.innerHTML = Array.prototype.map.call(row.cells, function (td, i) {
+        return "<dt>" + HEADS[i] + "</dt><dd>" + (td.textContent.trim() || "—") + "</dd>";
+      }).join("");
+    }
     document.getElementById("tbody").addEventListener("click", function (e) {
       var row = e.target.closest("tr");
       if (!row) return;
       this.querySelectorAll("tr").forEach(function (r) { r.dataset.sel = "false"; });
       row.dataset.sel = "true";
+      fillDetail(row);
+    });
+    fillDetail(document.querySelector('#tbody tr[data-sel="true"]'));
+
+    /* Vodorovne menu se klonuje z bocniho, aby polozky mely jediny zdroj.
+       Oddelovac sekce se nekopiruje jako nadpis -- vodorovne by nedaval smysl. */
+    (function () {
+      var topnav = document.getElementById("topnav");
+      Array.prototype.forEach.call(document.querySelector(".p-nav").children, function (el) {
+        if (el.classList.contains("p-navsec")) {
+          var sep = document.createElement("span");
+          sep.className = "p-navsep";
+          topnav.appendChild(sep);
+          return;
+        }
+        topnav.appendChild(el.cloneNode(true));
+      });
+      /* Vyber polozky drzi obe nabidky pohromade. */
+      function pick(root, btn) {
+        var idx = Array.prototype.indexOf.call(
+          root.querySelectorAll(".p-navitem"), btn);
+        if (idx < 0) return;
+        [document.querySelector(".p-nav"), topnav].forEach(function (nav) {
+          nav.querySelectorAll(".p-navitem").forEach(function (b, i) {
+            if (i === idx) b.setAttribute("aria-current", "true");
+            else b.removeAttribute("aria-current");
+          });
+        });
+      }
+      [document.querySelector(".p-nav"), topnav].forEach(function (nav) {
+        nav.addEventListener("click", function (e) {
+          var btn = e.target.closest(".p-navitem");
+          if (btn) pick(nav, btn);
+        });
+      });
+    })();
+
+    /* prepinac rozvrzeni */
+    document.querySelectorAll("[data-layout-set]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        preview.dataset.layout = b.dataset.layoutSet;
+        document.querySelectorAll("[data-layout-set]").forEach(function (o) {
+          o.setAttribute("aria-pressed", o === b ? "true" : "false");
+        });
+        updateLabel();
+      });
     });
 
     apply("ops-steel");
     window.__applyStyle = apply;
+    window.__applyLayout = function (name) {
+      var b = document.querySelector('[data-layout-set="' + name + '"]');
+      if (b) b.click();
+    };
   })();
 </script>
 
@@ -2328,18 +2548,28 @@
 
     function tok(cs, name) { return cs.getPropertyValue(name).trim(); }
 
+    /* Skryty prvek nema smysl merit -- v rozvrzeni bez bocniho panelu je
+       postranni menu display:none a merilo by se neco, co nikdo nevidi. */
+    function pick(sel) {
+      var list = preview.querySelectorAll(sel);
+      for (var i = 0; i < list.length; i++) {
+        if (list[i].offsetParent !== null || list[i] === preview) return list[i];
+      }
+      return null;
+    }
+
     /* Kontrast textu prvku proti jeho skutecnemu podkladu. */
     function textRatio(sel, bgSel) {
-      var el = preview.querySelector(sel);
+      var el = pick(sel);
       if (!el) return null;
-      var bg = effBg(bgSel ? (preview.querySelector(bgSel) || el) : el);
+      var bg = effBg(bgSel ? (pick(bgSel) || el) : el);
       var fg = effFg(el, bg);
       return fg ? contrast(fg, bg) : null;
     }
 
     /* Kontrast barevne plosky (stavovy ctverec) proti podkladu radku. */
     function markRatio(sel) {
-      var el = preview.querySelector(sel);
+      var el = pick(sel);
       if (!el) return null;
       var cs = getComputedStyle(el);
       var c = colorOf(cs.backgroundColor);
@@ -2402,7 +2632,9 @@
       ];
       checks.forEach(function (c) {
         var r = c[1];
-        if (r === null || isNaN(r)) { add("Kontrast", c[0], "warn", "?", "prvek nelze změřit"); return; }
+        // Nektera rozvrzeni prvek vubec nemaji (vodorovne menu nema nadpis
+        // sekce). To neni vada, jen se to nema co merit.
+        if (r === null || isNaN(r)) { add("Kontrast", c[0], "skip", "—", "v tomto rozvržení není"); return; }
         var v = r >= c[2] ? "pass" : (r >= c[3] ? "warn" : "fail");
         add("Kontrast", c[0], v, r.toFixed(2) + ":1",
             "požadavek " + c[2].toFixed(1) + ":1" + (c[3] < c[2] ? " (mez " + c[3].toFixed(1) + ")" : "") + " — " + c[4]);
@@ -2451,7 +2683,7 @@
         : rows.some(function (r) { return r.verdict === "warn"; }) ? "warn" : "pass";
     }
 
-    var MARK = { pass: "✓ v pořádku", warn: "! pozor", fail: "× chyba" };
+    var MARK = { pass: "✓ v pořádku", warn: "! pozor", fail: "× chyba", skip: "— netýká se" };
 
     function renderOne(slug, rows) {
       var groups = [];
@@ -2489,7 +2721,7 @@
         res.push({
           slug: slug,
           worst: worst(rows),
-          bad: rows.filter(function (r) { return r.verdict !== "pass"; })
+          bad: rows.filter(function (r) { return r.verdict === "warn" || r.verdict === "fail"; })
         });
       });
       window.__applyStyle(back);
@@ -2507,7 +2739,13 @@
       html += "</tbody></table>";
       var counts = { pass: 0, warn: 0, fail: 0 };
       res.forEach(function (r) { counts[r.worst]++; });
-      out.innerHTML = '<p class="note" style="padding-top:11px">' + res.length + " stylů · "
+      var LAYNAME = {
+        "side-nav": "boční panel", "top-tabs": "horní menu", "rail": "úzká lišta",
+        "master-detail": "seznam + detail", "split-console": "mřížka + konzole"
+      };
+      out.innerHTML = '<p class="note" style="padding-top:11px">'
+        + "Rozvržení <b>" + LAYNAME[preview.dataset.layout || "side-nav"] + "</b> · "
+        + res.length + " stylů · "
         + counts.pass + " bez připomínky · " + counts.warn + " s výhradou · " + counts.fail
         + " s chybou. Měřeno v tomto prohlížeči a v právě zvoleném světelném režimu — "
         + "na jiném stroji se výsledek u písem může lišit.</p>" + html;

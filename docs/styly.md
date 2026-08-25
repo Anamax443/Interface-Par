@@ -6,8 +6,9 @@ Táž aplikace vykreslená ve **dvaceti třech stylech**. Markup je ve všech p�
 identický — mění se výhradně sada tokenů. To je zároveň hlavní tvrzení celého
 katalogu: vzhled je konfigurace, ne přepis aplikace.
 
-Přepínat lze tři věci nezávisle na sobě: **styl**, **světelný režim** a
-**obrazovku** (Tabulka / Grafy). Pod náhledem je navíc **kontrola zobrazení**,
+Přepínat lze čtyři věci nezávisle na sobě: **styl**, **rozvržení**,
+**světelný režim** a **obrazovku** (Tabulka / Grafy). Pod náhledem je navíc
+**kontrola zobrazení**,
 která změří vykreslenou stránku a řekne, jestli styl na tomhle stroji drží —
 viz [Kontrola zobrazení](#kontrola-zobrazení).
 
@@ -53,6 +54,33 @@ které nesou text a stavové značky, jsou posunuté na tmavší členy téže p
 původní odstíny pro popisky mají na svém podkladu kontrast pod 3:1 a kontrola
 zobrazení je právem shazovala. Je to vědomá odchylka — paleta jako zdroj barev,
 ne jako závazné mapování na role.
+
+## Rozvržení
+
+Styl mění tokeny, **rozvržení mění kostru okna** — jsou to dvě nezávislé osy
+a dají se kombinovat (23 × 5). Obsah je ve všech případech tentýž: vodorovné
+menu se klonuje z bočního, detail i konzole jsou v markupu vždy a jen se
+odkrývají. Neexistuje tedy druhý zdroj pravdy o položkách menu.
+
+| Slug | Název | Kdy sáhnout |
+|---|---|---|
+| `side-nav` | Boční panel | Výchozí. Do ~12 položek menu, které je pořád vidět |
+| `top-tabs` | Horní menu | **Bez bočního panelu.** Když je potřeba celá šířka na data — široké tabulky s hodně sloupci |
+| `rail` | Úzká lišta | Kompromis: svislá navigace zůstane, ale vrátí ~140 px šířky. Popisek nese `title` |
+| `master-detail` | Seznam + detail | Inventáře: vyber řádek → napravo je o něm všechno, bez otevírání dialogu |
+| `split-console` | Mřížka + konzole | Úlohy, které běží: data nahoře, průběh dole. Sběrače, importy, měření |
+
+### Kde má horní menu strop
+
+`top-tabs` je pohodlný do zhruba **deseti až dvanácti položek**. Za tím se
+záložky přestanou vejít na šířku a je potřeba se rozhodnout: posuvný pás,
+sbalení do nabídek, nebo přechod na `rail` / `side-nav`. Samo se to nevyřeší —
+bez ošetření se pás buď zalomí, nebo vytlačí ovládání na pravé straně lišty.
+
+V katalogu je pás **posuvný** (`overflow-x: auto`) a řádek mřížky má výšku
+`auto` s dolní mezí. To druhé není detail: posuvník si ukousne kus výšky, a
+kdyby byla výška pevná, záložka by se do pásu přestala vejít. Kontrola
+zobrazení to odhalila u **všech 23 stylů** naráz.
 
 ## Jak jsou styly postavené
 
@@ -142,6 +170,11 @@ v tomhle prohlížeči — ne deklarované tokeny.
 | Hustota | Poměr výšky řádku k velikosti písma dat a počet řádků na 500 px. |
 | Rozměry | Přetečení prvků, které mají výšku danou tokenem — tam se text nemá kam podět a překryl by sousední řádek. Prvky s vlastním posuvníkem se přeskakují. |
 
+Kontrola běží vždy proti **právě zvolenému rozvržení** a měří jen **viditelné**
+prvky — v rozvržení bez bočního panelu je postranní menu `display:none` a
+nemá smysl je měřit. Co v daném rozvržení není (nadpis sekce menu ve
+vodorovné nabídce), se hlásí jako „netýká se", ne jako vada.
+
 Prahy jsou dvojí: **požadavek** (WCAG AA, 4,5:1 na text a 3:1 na grafický
 prvek) a **spodní mez**. Mezi nimi je výhrada, pod ní chyba. Nižší mez mají
 jen položky, které nejsou souvislý text — poznámka za jménem, tlumené sloupce
@@ -158,6 +191,9 @@ Kontrola není dekorace — přinesla čtyři skutečné opravy:
   a ve světlém režimu bílý text na světlém výběru (1,5:1).
 - `carbon-grid`, `nord-calm`, `winbox-95` a `blueprint-dense` měly bílý text
   na akcentu mezi 2,9 a 4,1:1.
+- rozvržení `top-tabs` padalo u **všech 23 stylů**: na užším okně se objeví
+  vodorovný posuvník, ukousne si výšku pásu a záložka se do něj přestane
+  vejít. Řádek mřížky je proto `auto` s dolní mezí, ne pevná výška.
 
 Zbylé nálezy jsou vědomé: kontrolní vzorky (`admin-common`, `saas-modern`,
 `vivid-gradient`) neprocházejí schválně — je to součást jejich sdělení — a
@@ -169,3 +205,11 @@ Zbylé nálezy jsou vědomé: kontrolní vzorky (`admin-common`, `saas-modern`,
 2. Záznam v poli `STYLES` v JavaScriptu — slug, název, popis, kdy použít, vzorky.
 3. Spustit **Zkontrolovat všechny styly** a projít, co nový styl shodil.
 4. Nic víc. Markup se nemění.
+
+## Přidání rozvržení
+
+1. Blok `\u005b data-layout="slug" \u005d` s mřížkou (`grid-template-*`) a s tím,
+   co se odkrývá nebo skrývá.
+2. Tlačítko v přepínači `#layoutswitch`.
+3. Projet kontrolu **v tom novém rozvržení** — nálezy se liší podle kostry,
+   ne podle stylu.

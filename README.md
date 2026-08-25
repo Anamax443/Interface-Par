@@ -10,7 +10,7 @@ a rozbor, kdy se vyplatí sáhnout po komponentové knihovně a kdy ne.
 
 | Cesta | Co to je |
 |---|---|
-| [`mockup/ui-styly-katalog.html`](mockup/ui-styly-katalog.html) | **Katalog 23 vizuálních stylů.** Táž aplikace, přepínatelný styl, světelný režim a obrazovka (tabulka / grafy). Vestavěná **kontrola zobrazení** změří písma, kontrast a hustotu na tvém stroji. Začni tady. |
+| [`mockup/ui-styly-katalog.html`](mockup/ui-styly-katalog.html) | **Katalog 23 vizuálních stylů.** Táž aplikace, přepínatelný styl, **rozvržení**, světelný režim a obrazovka (tabulka / grafy). Vestavěná **kontrola zobrazení** změří písma, kontrast a hustotu na tvém stroji. Začni tady. |
 | [`mockup/git-nastenka-shell.html`](mockup/git-nastenka-shell.html) | Původní mockup kostry — sidebar, toolbar, hustý grid, stavový řádek. |
 | [`docs/styly.md`](docs/styly.md) | Popis všech stylů, jak jsou postavené, pravidla pro grafy a barvy dat. |
 | [`docs/rozhovor.md`](docs/rozhovor.md) | Průběh návrhu: zadání, zvažované varianty, rozbor React + MUI, doporučení. |
@@ -27,6 +27,19 @@ dolaďoval dodatečně u každé zvlášť.
 Styly jsou pojmenované (`ops-steel`, `winbox-95`, `ticker-black`, …), takže
 volba je zapsatelná a přenositelná. Přehled je v [`docs/styly.md`](docs/styly.md).
 
+## Dvě nezávislé osy
+
+**Styl** mění tokeny (barvy, písmo, hustota). **Rozvržení** mění kostru okna.
+Kombinují se: 23 × 5.
+
+| Rozvržení | Co to je |
+|---|---|
+| `side-nav` | Boční panel — výchozí |
+| `top-tabs` | Horní menu bez bočního panelu, celá šířka na data |
+| `rail` | Úzká svislá lišta jen s ikonami |
+| `master-detail` | Seznam vlevo, detail vybraného řádku vpravo |
+| `split-console` | Mřížka nahoře, průběh úlohy dole |
+
 ## Nestandardní vzhled se musí umět zkontrolovat
 
 Čím dál je styl od výchozí šablony, tím spíš se rozbije tiše — chybí písmo,
@@ -34,6 +47,7 @@ tlumený odstín zmizí, hustý řádek nepobere text. Katalog proto umí sám s
 změřit: tlačítko **Zkontrolovat všechny styly** projde všech 23 a u každého
 ověří dostupnost písem, kontrast podle WCAG na **skutečně vykreslených
 prvcích**, poměr výšky řádku k písmu a přetečení prvků s pevnou výškou.
+Běží proti právě zvolenému rozvržení, takže se dá projet celá kombinace.
 
 Volba nestandardního vzhledu tak není sázka — je to měřitelný stav. Podrobnosti
 v [`docs/styly.md`](docs/styly.md#kontrola-zobrazení).
