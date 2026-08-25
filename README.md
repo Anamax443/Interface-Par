@@ -10,7 +10,7 @@ a rozbor, kdy se vyplatí sáhnout po komponentové knihovně a kdy ne.
 
 | Cesta | Co to je |
 |---|---|
-| [`mockup/ui-styly-katalog.html`](mockup/ui-styly-katalog.html) | **Katalog 14 vizuálních stylů.** Táž aplikace, přepínatelný styl, světelný režim a obrazovka (tabulka / grafy). Začni tady. |
+| [`mockup/ui-styly-katalog.html`](mockup/ui-styly-katalog.html) | **Katalog 23 vizuálních stylů.** Táž aplikace, přepínatelný styl, světelný režim a obrazovka (tabulka / grafy). Vestavěná **kontrola zobrazení** změří písma, kontrast a hustotu na tvém stroji. Začni tady. |
 | [`mockup/git-nastenka-shell.html`](mockup/git-nastenka-shell.html) | Původní mockup kostry — sidebar, toolbar, hustý grid, stavový řádek. |
 | [`docs/styly.md`](docs/styly.md) | Popis všech stylů, jak jsou postavené, pravidla pro grafy a barvy dat. |
 | [`docs/rozhovor.md`](docs/rozhovor.md) | Průběh návrhu: zadání, zvažované varianty, rozbor React + MUI, doporučení. |
@@ -24,8 +24,19 @@ Vybrat jeden styl, zapsat jeho slug do zakládaného projektu jako `ui.style`
 a mít od začátku jasno, jak bude aplikace vypadat — místo aby se vzhled
 dolaďoval dodatečně u každé zvlášť.
 
-Styly jsou pojmenované (`ops-steel`, `carbon-grid`, `ledger-mono`, …), takže
+Styly jsou pojmenované (`ops-steel`, `winbox-95`, `ticker-black`, …), takže
 volba je zapsatelná a přenositelná. Přehled je v [`docs/styly.md`](docs/styly.md).
+
+## Nestandardní vzhled se musí umět zkontrolovat
+
+Čím dál je styl od výchozí šablony, tím spíš se rozbije tiše — chybí písmo,
+tlumený odstín zmizí, hustý řádek nepobere text. Katalog proto umí sám sebe
+změřit: tlačítko **Zkontrolovat všechny styly** projde všech 23 a u každého
+ověří dostupnost písem, kontrast podle WCAG na **skutečně vykreslených
+prvcích**, poměr výšky řádku k písmu a přetečení prvků s pevnou výškou.
+
+Volba nestandardního vzhledu tak není sázka — je to měřitelný stav. Podrobnosti
+v [`docs/styly.md`](docs/styly.md#kontrola-zobrazení).
 
 ## Vizuální pravidla
 

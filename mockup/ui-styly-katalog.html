@@ -198,6 +198,69 @@
     color: var(--g-faint); font-size: 12px; margin: 0;
   }
 
+  /* --- kontrola zobrazeni --- */
+
+  .audit {
+    background: var(--g-panel);
+    border: 1px solid var(--g-border);
+    border-radius: 3px;
+  }
+  .audit > header {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--g-border);
+  }
+  .audit h2 { margin: 0; font-size: 14.5px; font-weight: 650; }
+  .audit header p { margin: 0; color: var(--g-dim); font-size: 12.5px; max-width: 62ch; flex: 1 1 320px; }
+  .audit button {
+    padding: 6px 11px;
+    border: 1px solid var(--g-border); border-radius: 3px;
+    background: var(--g-panel); color: var(--g-text);
+    font: inherit; font-size: 12.5px; cursor: pointer;
+  }
+  .audit button:hover { background: var(--g-sunk); }
+  .audit button[disabled] { opacity: .55; cursor: default; }
+
+  .auditbody { padding: 0 14px 13px; }
+  .auditbody:empty { display: none; }
+
+  .audittable { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .audittable caption {
+    text-align: left; padding: 11px 0 5px;
+    font-weight: 650; font-size: 13px;
+  }
+  .audittable th, .audittable td {
+    text-align: left; padding: 4px 10px 4px 0;
+    border-bottom: 1px solid var(--g-border);
+    vertical-align: top;
+  }
+  .audittable th { color: var(--g-dim); font-weight: 500; white-space: nowrap; }
+  .audittable td.v { font-family: var(--g-mono); font-size: 11.5px; white-space: nowrap; }
+  .audittable td.note { color: var(--g-dim); }
+
+  .verdict { font-family: var(--g-mono); font-size: 11.5px; font-weight: 700; white-space: nowrap; }
+  .verdict.pass { color: #2f7d4c; }
+  .verdict.warn { color: #9a6412; }
+  .verdict.fail { color: #a63a2e; }
+  @media (prefers-color-scheme: dark) {
+    .verdict.pass { color: #63ac72; } .verdict.warn { color: #c99a3a; } .verdict.fail { color: #dc6b60; }
+  }
+  :root[data-theme="dark"] .verdict.pass { color: #63ac72; }
+  :root[data-theme="dark"] .verdict.warn { color: #c99a3a; }
+  :root[data-theme="dark"] .verdict.fail { color: #dc6b60; }
+  :root[data-theme="light"] .verdict.pass { color: #2f7d4c; }
+  :root[data-theme="light"] .verdict.warn { color: #9a6412; }
+  :root[data-theme="light"] .verdict.fail { color: #a63a2e; }
+
+  .auditmatrix { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+  .auditmatrix th, .auditmatrix td {
+    padding: 3px 8px 3px 0; text-align: left;
+    border-bottom: 1px solid var(--g-border); white-space: nowrap;
+  }
+  .auditmatrix th { color: var(--g-dim); font-weight: 500; }
+  .auditmatrix td.slug { font-family: var(--g-mono); font-size: 11.5px; }
+  .auditmatrix tr[data-worst="fail"] td.slug { font-weight: 700; }
+
   :focus-visible { outline: 2px solid var(--g-accent); outline-offset: 1px; }
 
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
@@ -213,7 +276,7 @@
   .preview[data-style="ops-steel"] {
     --l-pane:#ffffff; --l-chrome:#edeff2; --l-chromehi:#f6f7f9; --l-head:#e3e7eb;
     --l-zebra:#f8f9fb; --l-hover:#e6eaee; --l-border:#c9cfd6; --l-bordersoft:#dde1e6;
-    --l-text:#1a1e22; --l-dim:#5c656e; --l-faint:#8b939b;
+    --l-text:#1a1e22; --l-dim:#5c656e; --l-faint:#7d858d;
     --l-accent:#31628c; --l-accsoft:rgba(49,98,140,.14); --l-accfg:#ffffff;
     --l-ok:#3d7f4c; --l-warn:#96700d; --l-crit:#a93b31;
 
@@ -244,7 +307,7 @@
     --d-pane:#262626; --d-chrome:#161616; --d-chromehi:#262626; --d-head:#393939;
     --d-zebra:#262626; --d-hover:#353535; --d-border:#393939; --d-bordersoft:#393939;
     --d-text:#f4f4f4; --d-dim:#c6c6c6; --d-faint:#8d8d8d;
-    --d-accent:#4589ff; --d-accsoft:#0043ce; --d-accfg:#ffffff;
+    --d-accent:#4589ff; --d-accsoft:#0043ce; --d-accfg:#161616;
     --d-ok:#42be65; --d-warn:#d2a106; --d-crit:#fa4d56;
 
     --radius:0px; --nav-radius:0px; --sel-bar:3px;
@@ -285,7 +348,7 @@
   .preview[data-style="console-dark"] {
     --l-pane:#fbfbf9; --l-chrome:#f0efeb; --l-chromehi:#f6f5f2; --l-head:#e9e8e3;
     --l-zebra:#f6f5f2; --l-hover:#eae9e4; --l-border:#d3d2cb; --l-bordersoft:#e0dfd9;
-    --l-text:#23282e; --l-dim:#5a6169; --l-faint:#8a9099;
+    --l-text:#23282e; --l-dim:#5a6169; --l-faint:#7b828b;
     --l-accent:#9a6412; --l-accsoft:rgba(154,100,18,.12); --l-accfg:#ffffff;
     --l-ok:#2f7d4c; --l-warn:#9a6412; --l-crit:#a63a2e;
 
@@ -333,7 +396,7 @@
   .preview[data-style="ledger-mono"] {
     --l-pane:#ffffff; --l-chrome:#f2f3f5; --l-chromehi:#f8f9fa; --l-head:#e9ebee;
     --l-zebra:#fafbfc; --l-hover:#eceef1; --l-border:#cdd2d8; --l-bordersoft:#dfe3e7;
-    --l-text:#14171a; --l-dim:#59616a; --l-faint:#878f98;
+    --l-text:#14171a; --l-dim:#59616a; --l-faint:#7d858e;
     --l-accent:#35678c; --l-accsoft:rgba(53,103,140,.12); --l-accfg:#ffffff;
     --l-ok:#1f7a43; --l-warn:#8a6512; --l-crit:#a3392f;
 
@@ -357,7 +420,7 @@
   .preview[data-style="blueprint-dense"] {
     --l-pane:#ffffff; --l-chrome:#f6f7f9; --l-chromehi:#ffffff; --l-head:#f6f7f9;
     --l-zebra:#ffffff; --l-hover:#edeff2; --l-border:#d3d8de; --l-bordersoft:#e1e5ea;
-    --l-text:#1c2127; --l-dim:#5f6b7c; --l-faint:#8f99a8;
+    --l-text:#1c2127; --l-dim:#5f6b7c; --l-faint:#7d8797;
     --l-accent:#2d72d2; --l-accsoft:rgba(45,114,210,.12); --l-accfg:#ffffff;
     --l-ok:#238551; --l-warn:#c87619; --l-crit:#cd4246;
 
@@ -406,7 +469,7 @@
     --l-pane:#ffffff; --l-chrome:#eceff4; --l-chromehi:#f4f6f9; --l-head:#e5e9f0;
     --l-zebra:#f7f9fb; --l-hover:#e0e5ee; --l-border:#ccd3de; --l-bordersoft:#dfe4ec;
     --l-text:#2e3440; --l-dim:#4c566a; --l-faint:#7b8494;
-    --l-accent:#5e81ac; --l-accsoft:rgba(94,129,172,.13); --l-accfg:#ffffff;
+    --l-accent:#4c6f9a; --l-accsoft:rgba(76,111,154,.13); --l-accfg:#ffffff;
     --l-ok:#4f7a3f; --l-warn:#97710f; --l-crit:#a4454e;
 
     --d-pane:#2e3440; --d-chrome:#292e39; --d-chromehi:#323845; --d-head:#3b4252;
@@ -545,6 +608,317 @@
     --th-transform:none; --th-ls:0; --th-weight:500;
     --nav-h:42px; --pane-shadow:0 4px 14px rgba(124,58,237,.18); --dot-radius:50%;
   }
+
+  /* ---- winbox-95 : nastrojove okno Win32 (WinBox doslova) ---- */
+  .preview[data-style="winbox-95"] {
+    --l-pane:#ffffff; --l-chrome:#f0f0f0; --l-chromehi:#f6f6f6; --l-head:#e9e9e9;
+    --l-zebra:#f7f7f7; --l-hover:#e5f0fb; --l-border:#a0a0a0; --l-bordersoft:#d7d7d7;
+    --l-text:#000000; --l-dim:#3f3f3f; --l-faint:#767676;
+    --l-accent:#2a5cad; --l-accsoft:#cbe0f7; --l-accfg:#ffffff;
+    --l-ok:#1a7a1a; --l-warn:#8a6d00; --l-crit:#c00000;
+
+    --d-pane:#2d2d30; --d-chrome:#3f3f46; --d-chromehi:#45454b; --d-head:#37373d;
+    --d-zebra:#313135; --d-hover:#3e5f8a; --d-border:#5a5a5e; --d-bordersoft:#414146;
+    --d-text:#f0f0f0; --d-dim:#b8b8bc; --d-faint:#8a8a8e;
+    --d-accent:#2f6cbd; --d-accsoft:#24405f; --d-accfg:#ffffff;
+    --d-ok:#4cb04c; --d-warn:#c9a227; --d-crit:#e05252;
+
+    --radius:0px; --nav-radius:0px; --sel-bar:0px;
+    --row-h:20px; --title-h:28px; --tb-h:26px; --panehead-h:22px; --status-h:20px;
+    --font-ui:"Segoe UI",Tahoma,sans-serif;
+    --font-display:var(--font-ui);
+    --font-data:"Lucida Console",Consolas,monospace;
+    --fs-ui:12px; --fs-data:11.5px; --fs-th:11.5px;
+    --th-transform:none; --th-ls:0; --th-weight:400;
+    --nav-h:21px; --pane-shadow:none; --dot-radius:0px;
+  }
+
+  /* ---- turbo-tui : textova konzole (Turbo Vision) ---- */
+  .preview[data-style="turbo-tui"] {
+    --l-pane:#ffffff; --l-chrome:#c8c8c8; --l-chromehi:#d8d8d8; --l-head:#c8c8c8;
+    --l-zebra:#f2f2f2; --l-hover:#d8d8d8; --l-border:#16161d; --l-bordersoft:#b4b4b4;
+    --l-text:#16161d; --l-dim:#3c3c50; --l-faint:#5c5c70;
+    --l-accent:#0000a8; --l-accsoft:#0000a8; --l-accfg:#ffffff;
+    --l-ok:#007a00; --l-warn:#8a6a00; --l-crit:#a80000;
+
+    --d-pane:#0000a8; --d-chrome:#000087; --d-chromehi:#0000a8; --d-head:#0000a8;
+    --d-zebra:#0000a8; --d-hover:#0054a8; --d-border:#54fcfc; --d-bordersoft:#3838c0;
+    --d-text:#e8e8e8; --d-dim:#a8c8fc; --d-faint:#7878d8;
+    --d-accent:#fcfc54; --d-accsoft:#00a8a8; --d-accfg:#000000;
+    --d-ok:#54fc54; --d-warn:#fcfc54; --d-crit:#fc5454;
+
+    --border-w:3px;
+    --radius:0px; --nav-radius:0px; --sel-bar:0px;
+    /* Dvojity ramecek ubira 3 px z vysky -- listy proto o neco vyssi, jinak
+       se pole na horni liste nevejde a pretece. */
+    --row-h:22px; --title-h:32px; --tb-h:30px; --panehead-h:24px; --status-h:26px;
+    --font-ui:"Cascadia Mono",Consolas,"Lucida Console",monospace;
+    --font-display:var(--font-ui);
+    --font-data:var(--font-ui);
+    --fs-ui:12.5px; --fs-data:12.5px; --fs-th:12.5px;
+    --th-transform:uppercase; --th-ls:.5px; --th-weight:700;
+    --nav-h:22px; --pane-shadow:none; --dot-radius:0px;
+  }
+
+  /* ---- hmi-slate : velin / prumyslovy panel ---- */
+  .preview[data-style="hmi-slate"] {
+    --l-pane:#eef1f4; --l-chrome:#dfe4e9; --l-chromehi:#e8ecf0; --l-head:#cfd6dd;
+    --l-zebra:#e7ebef; --l-hover:#d5dde5; --l-border:#9aa5b1; --l-bordersoft:#c3ccd4;
+    --l-text:#10161c; --l-dim:#46525e; --l-faint:#6f7c88;
+    --l-accent:#0a6ea8; --l-accsoft:rgba(10,110,168,.16); --l-accfg:#ffffff;
+    --l-ok:#0a7d33; --l-warn:#b06a00; --l-crit:#c01f1f;
+
+    --d-pane:#161c22; --d-chrome:#0e1318; --d-chromehi:#1a2229; --d-head:#202a33;
+    --d-zebra:#1a2027; --d-hover:#24303a; --d-border:#33414d; --d-bordersoft:#263039;
+    --d-text:#e8eef4; --d-dim:#9fb0bf; --d-faint:#6f8090;
+    --d-accent:#1e9de0; --d-accsoft:rgba(30,157,224,.18); --d-accfg:#06121b;
+    --d-ok:#2fbf5a; --d-warn:#ffb020; --d-crit:#ff4d4d;
+
+    --border-w:2px;
+    --radius:0px; --nav-radius:0px; --sel-bar:4px;
+    --row-h:30px; --title-h:38px; --tb-h:34px; --panehead-h:30px; --status-h:28px;
+    --font-ui:"Segoe UI","Helvetica Neue",system-ui,sans-serif;
+    --font-display:var(--font-ui);
+    --font-data:"Cascadia Mono",Consolas,monospace;
+    --fs-ui:13.5px; --fs-data:13.5px; --fs-th:12px;
+    --th-transform:uppercase; --th-ls:1px; --th-weight:700;
+    --nav-h:32px; --pane-shadow:none; --dot-radius:0px;
+  }
+
+  /* ---- ticker-black : burzovni terminal ---- */
+  .preview[data-style="ticker-black"] {
+    --l-pane:#ffffff; --l-chrome:#f2f2f2; --l-chromehi:#fafafa; --l-head:#e8e8e8;
+    --l-zebra:#ffffff; --l-hover:#ffe9c9; --l-border:#cccccc; --l-bordersoft:#e6e6e6;
+    --l-text:#111111; --l-dim:#555555; --l-faint:#888888;
+    --l-accent:#8f4900; --l-accsoft:#fff1dd; --l-accfg:#ffffff;
+    --l-ok:#0a6b2e; --l-warn:#8a5b00; --l-crit:#b3001b;
+
+    --d-pane:#000000; --d-chrome:#000000; --d-chromehi:#0a0a0a; --d-head:#141414;
+    --d-zebra:#000000; --d-hover:#1a1a1a; --d-border:#2f2f2f; --d-bordersoft:#161616;
+    --d-text:#e8e8e8; --d-dim:#9a9a9a; --d-faint:#6a6a6a;
+    --d-accent:#ff9d00; --d-accsoft:#2a1c00; --d-accfg:#000000;
+    --d-ok:#00c853; --d-warn:#ffb300; --d-crit:#ff3b30;
+
+    --radius:0px; --nav-radius:0px; --sel-bar:0px;
+    --row-h:20px; --title-h:26px; --tb-h:24px; --panehead-h:22px; --status-h:20px;
+    --font-ui:"Cascadia Mono",Consolas,monospace;
+    --font-display:var(--font-ui);
+    --font-data:var(--font-ui);
+    --fs-ui:12px; --fs-data:12px; --fs-th:11px;
+    --th-transform:uppercase; --th-ls:.6px; --th-weight:700;
+    --nav-h:21px; --pane-shadow:none; --dot-radius:0px;
+  }
+
+  /* ---- solar-parchment : tepla tlumena (Solarized, ethanschoonover) ---- */
+  .preview[data-style="solar-parchment"] {
+    /* Plochy drzi Solarized presne; role, ktere nesou text a znacky, jsou
+       posunute na tmavsi cleny palety -- puvodni base1/yellow maji na base3
+       kontrast pod 3:1 a kontrola je pravem shazovala. */
+    --l-pane:#fdf6e3; --l-chrome:#eee8d5; --l-chromehi:#f5efdc; --l-head:#e6dfc6;
+    --l-zebra:#f7f1de; --l-hover:#e9e2ca; --l-border:#cfc7ad; --l-bordersoft:#e0d9c0;
+    --l-text:#073642; --l-dim:#4c6169; --l-faint:#6f7d7d;
+    --l-accent:#1a6fa8; --l-accsoft:rgba(26,111,168,.14); --l-accfg:#fdf6e3;
+    --l-ok:#6d7f00; --l-warn:#a37a00; --l-crit:#c32724;
+
+    --d-pane:#002b36; --d-chrome:#00212b; --d-chromehi:#073642; --d-head:#073642;
+    --d-zebra:#01303c; --d-hover:#0a4553; --d-border:#14505f; --d-bordersoft:#0c3f4c;
+    --d-text:#eee8d5; --d-dim:#93a1a1; --d-faint:#657b83;
+    --d-accent:#268bd2; --d-accsoft:rgba(38,139,210,.20); --d-accfg:#002b36;
+    --d-ok:#859900; --d-warn:#b58900; --d-crit:#dc322f;
+
+    --radius:2px; --nav-radius:2px; --sel-bar:2px;
+    --row-h:27px; --title-h:34px; --tb-h:31px; --panehead-h:27px; --status-h:23px;
+    --font-ui:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
+    --font-display:var(--font-ui);
+    --font-data:"Cascadia Mono",Consolas,monospace;
+    --fs-ui:12.5px; --fs-data:12px; --fs-th:11.5px;
+    --th-transform:none; --th-ls:.2px; --th-weight:600;
+    --nav-h:28px; --pane-shadow:none; --dot-radius:50%;
+  }
+
+  /* ---- mono-brutal : brutalisticka ---- */
+  .preview[data-style="mono-brutal"] {
+    --l-pane:#ffffff; --l-chrome:#ffffff; --l-chromehi:#ffffff; --l-head:#000000;
+    --l-zebra:#f4f4f4; --l-hover:#ffe600; --l-border:#000000; --l-bordersoft:#000000;
+    --l-text:#000000; --l-dim:#3a3a3a; --l-faint:#6e6e6e;
+    --l-accent:#000000; --l-accsoft:#ffe600; --l-accfg:#ffffff;
+    --l-ok:#006b2d; --l-warn:#8a5a00; --l-crit:#d10000;
+
+    --d-pane:#0a0a0a; --d-chrome:#0a0a0a; --d-chromehi:#0a0a0a; --d-head:#f2f2f2;
+    --d-zebra:#151515; --d-hover:#ffd400; --d-border:#f2f2f2; --d-bordersoft:#f2f2f2;
+    --d-text:#f2f2f2; --d-dim:#c2c2c2; --d-faint:#8a8a8a;
+    --d-accent:#f2f2f2; --d-accsoft:#ffd400; --d-accfg:#0a0a0a;
+    --d-ok:#3ddc84; --d-warn:#ffd400; --d-crit:#ff4d4d;
+
+    --border-w:2px;
+    --radius:0px; --nav-radius:0px; --sel-bar:6px;
+    --row-h:28px; --title-h:40px; --tb-h:34px; --panehead-h:30px; --status-h:26px;
+    --font-ui:"Cascadia Mono",Consolas,monospace;
+    --font-display:var(--font-ui);
+    --font-data:var(--font-ui);
+    --fs-ui:12.5px; --fs-data:12.5px; --fs-th:11.5px;
+    --th-transform:uppercase; --th-ls:1.2px; --th-weight:700;
+    --nav-h:30px; --pane-shadow:4px 4px 0 var(--border); --dot-radius:0px;
+  }
+
+  /* ---- gruvbox-warm : prevzata paleta (morhetz/gruvbox) ---- */
+  .preview[data-style="gruvbox-warm"] {
+    --l-pane:#fbf1c7; --l-chrome:#f2e5bc; --l-chromehi:#f9f5d7; --l-head:#ebdbb2;
+    --l-zebra:#f6ecc4; --l-hover:#ebdbb2; --l-border:#bdae93; --l-bordersoft:#d5c4a1;
+    --l-text:#282828; --l-dim:#665c54; --l-faint:#857767;
+    --l-accent:#076678; --l-accsoft:rgba(7,102,120,.14); --l-accfg:#fbf1c7;
+    --l-ok:#79740e; --l-warn:#b57614; --l-crit:#9d0006;
+
+    --d-pane:#282828; --d-chrome:#1d2021; --d-chromehi:#32302f; --d-head:#3c3836;
+    --d-zebra:#2d2b28; --d-hover:#3c3836; --d-border:#504945; --d-bordersoft:#3c3836;
+    --d-text:#ebdbb2; --d-dim:#bdae93; --d-faint:#928374;
+    --d-accent:#83a598; --d-accsoft:rgba(131,165,152,.16); --d-accfg:#1d2021;
+    --d-ok:#b8bb26; --d-warn:#fabd2f; --d-crit:#fb4934;
+
+    --radius:2px; --nav-radius:2px; --sel-bar:3px;
+    --row-h:26px; --title-h:33px; --tb-h:30px; --panehead-h:26px; --status-h:23px;
+    --font-ui:"Segoe UI","Helvetica Neue",system-ui,sans-serif;
+    --font-display:var(--font-ui);
+    --font-data:"Cascadia Mono",Consolas,monospace;
+    --fs-ui:12.5px; --fs-data:12px; --fs-th:11.5px;
+    --th-transform:none; --th-ls:.2px; --th-weight:600;
+    --nav-h:27px; --pane-shadow:none; --dot-radius:2px;
+  }
+
+  /* ---- catppuccin-soft : prevzata paleta (catppuccin, Latte + Mocha) ---- */
+  .preview[data-style="catppuccin-soft"] {
+    /* Latte drzi plochy; overlay0 a yellow jsou na text a znacky prilis
+       svetle, proto overlay2 a tmavsi zluta. */
+    --l-pane:#eff1f5; --l-chrome:#e6e9ef; --l-chromehi:#eff1f5; --l-head:#dce0e8;
+    --l-zebra:#e9ecf1; --l-hover:#ccd0da; --l-border:#bcc0cc; --l-bordersoft:#ccd0da;
+    --l-text:#4c4f69; --l-dim:#5c5f77; --l-faint:#7c7f93;
+    --l-accent:#1a5ce0; --l-accsoft:rgba(26,92,224,.12); --l-accfg:#ffffff;
+    --l-ok:#3a8f27; --l-warn:#b47a12; --l-crit:#d20f39;
+
+    --d-pane:#1e1e2e; --d-chrome:#181825; --d-chromehi:#1e1e2e; --d-head:#313244;
+    --d-zebra:#21212f; --d-hover:#313244; --d-border:#45475a; --d-bordersoft:#313244;
+    --d-text:#cdd6f4; --d-dim:#a6adc8; --d-faint:#6c7086;
+    --d-accent:#89b4fa; --d-accsoft:rgba(137,180,250,.16); --d-accfg:#11111b;
+    --d-ok:#a6e3a1; --d-warn:#f9e2af; --d-crit:#f38ba8;
+
+    --radius:6px; --nav-radius:6px; --sel-bar:0px;
+    --row-h:30px; --title-h:38px; --tb-h:34px; --panehead-h:30px; --status-h:26px;
+    --font-ui:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
+    --font-display:var(--font-ui);
+    --font-data:"Cascadia Mono",Consolas,monospace;
+    --fs-ui:13px; --fs-data:12.5px; --fs-th:12px;
+    --th-transform:none; --th-ls:0; --th-weight:600;
+    --nav-h:30px; --pane-shadow:none; --dot-radius:50%;
+  }
+
+  /* ---- tokyo-night : prevzata paleta (enkia/tokyo-night, Night + Day) ---- */
+  .preview[data-style="tokyo-night"] {
+    /* Tokyo Night Day ma text v modre; pro cteni v tabulce je puvodni odstin
+       prilis svetly, takze textove role jdou o stupen dolu. */
+    --l-pane:#e6e7ec; --l-chrome:#d6dae6; --l-chromehi:#eaebef; --l-head:#c9cddc;
+    --l-zebra:#e0e1e8; --l-hover:#ccd0dd; --l-border:#a8aecb; --l-bordersoft:#c4c8da;
+    --l-text:#2b4a94; --l-dim:#43508c; --l-faint:#666f9c;
+    --l-accent:#1f5fc4; --l-accsoft:rgba(31,95,196,.13); --l-accfg:#ffffff;
+    --l-ok:#4a6530; --l-warn:#775a32; --l-crit:#c4114b;
+
+    --d-pane:#1a1b26; --d-chrome:#16161e; --d-chromehi:#1f2030; --d-head:#292e42;
+    --d-zebra:#1c1d2b; --d-hover:#292e42; --d-border:#414868; --d-bordersoft:#292e42;
+    --d-text:#c0caf5; --d-dim:#a9b1d6; --d-faint:#656e98;
+    --d-accent:#7aa2f7; --d-accsoft:rgba(122,162,247,.16); --d-accfg:#16161e;
+    --d-ok:#9ece6a; --d-warn:#e0af68; --d-crit:#f7768e;
+
+    --radius:4px; --nav-radius:4px; --sel-bar:3px;
+    --row-h:27px; --title-h:34px; --tb-h:31px; --panehead-h:27px; --status-h:24px;
+    --font-ui:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
+    --font-display:var(--font-ui);
+    --font-data:"Cascadia Mono",Consolas,monospace;
+    --fs-ui:12.5px; --fs-data:12px; --fs-th:11.5px;
+    --th-transform:none; --th-ls:.2px; --th-weight:600;
+    --nav-h:28px; --pane-shadow:none; --dot-radius:50%;
+  }
+
+  /* ---- strukturalni odchylky novych stylu ---- */
+
+  /* winbox-95: plasticke okraje Win32 misto plochych linek, vyber cely radek */
+  .preview[data-style="winbox-95"] .p-btn {
+    border: 1px solid var(--border);
+    border-top-color: var(--chromehi); border-left-color: var(--chromehi);
+    background: var(--chrome);
+  }
+  .preview[data-style="winbox-95"] .p-btn:hover { background: var(--chromehi); }
+  .preview[data-style="winbox-95"] .p-gridwrap {
+    border: 1px solid var(--border);
+    border-right-color: var(--bordersoft); border-bottom-color: var(--bordersoft);
+    margin: 3px; background: var(--pane);
+  }
+  .preview[data-style="winbox-95"] .p-table thead th {
+    border-right: 1px solid var(--border);
+    border-top: 1px solid var(--chromehi);
+    background: var(--chrome);
+  }
+  .preview[data-style="winbox-95"] .p-table tbody tr[data-sel="true"] td {
+    background: var(--accent); color: var(--accfg);
+  }
+  .preview[data-style="winbox-95"] .p-table tbody tr[data-sel="true"] td .dim,
+  .preview[data-style="winbox-95"] .p-table tbody tr[data-sel="true"] td.c-date,
+  .preview[data-style="winbox-95"] .p-table tbody tr[data-sel="true"] td.c-vs { color: var(--accfg); opacity: .85; }
+  .preview[data-style="winbox-95"] .p-table tbody tr[data-sel="true"] td:first-child { box-shadow: none; }
+  .preview[data-style="winbox-95"] .p-navitem[aria-current="true"] { background: var(--accent); color: var(--accfg); }
+  .preview[data-style="winbox-95"] .p-navitem[aria-current="true"] .icon { color: var(--accfg); }
+  .preview[data-style="winbox-95"] .p-panehead { background: var(--chrome); }
+
+  /* turbo-tui: dvojite ramecky misto vlasovych linek, vyber jako blok */
+  .preview[data-style="turbo-tui"] .p-title,
+  .preview[data-style="turbo-tui"] .p-nav,
+  .preview[data-style="turbo-tui"] .p-panehead,
+  .preview[data-style="turbo-tui"] .p-toolbar,
+  .preview[data-style="turbo-tui"] .p-status { border-style: double; }
+  .preview[data-style="turbo-tui"] .p-table tbody td { border-bottom-width: 1px; border-bottom-style: solid; }
+  .preview[data-style="turbo-tui"] .p-table thead th { border-bottom-style: double; color: var(--accent); }
+  .preview[data-style="turbo-tui"] .p-table tbody tr[data-sel="true"] td { background: var(--accsoft); color: var(--accfg); }
+  .preview[data-style="turbo-tui"] .p-navitem[aria-current="true"] { background: var(--accsoft); color: var(--accfg); box-shadow: none; }
+  .preview[data-style="turbo-tui"] .p-navitem[aria-current="true"] .icon { color: var(--accfg); }
+  .preview[data-style="turbo-tui"] .p-field { border-style: solid; }
+  /* Vyber i hlavicka panelu jsou plny blok v akcentu -- text na nem proto
+     nesmi zustat v barve bezneho textu. */
+  .preview[data-style="turbo-tui"] .p-panehead { color: var(--accfg); }
+  .preview[data-style="turbo-tui"] .p-panehead .icon,
+  .preview[data-style="turbo-tui"] .p-panehead .n { color: var(--accfg); }
+  /* Ve vybranem radku lezi tlumeny text na azurove plose -- puvodni --faint
+     na ni mel kontrast pod 3:1. */
+  .preview[data-style="turbo-tui"] .p-table tbody tr[data-sel="true"] td .dim,
+  .preview[data-style="turbo-tui"] .p-table tbody tr[data-sel="true"] td.c-date,
+  .preview[data-style="turbo-tui"] .p-table tbody tr[data-sel="true"] td.c-vs { color: var(--accfg); opacity: .8; }
+
+  /* hmi-slate: stavovy ctverec je hlavni prvek, hlavicka panelu jako pruh */
+  .preview[data-style="hmi-slate"] .p-dot { width: 11px; height: 11px; margin-right: 9px; }
+  .preview[data-style="hmi-slate"] .p-panehead { background: var(--accent); color: var(--accfg); }
+  .preview[data-style="hmi-slate"] .p-panehead .icon,
+  .preview[data-style="hmi-slate"] .p-panehead .n { color: var(--accfg); opacity: .9; }
+  .preview[data-style="hmi-slate"] .p-status b { font-size: calc(var(--fs-ui) + 1px); }
+
+  /* ticker-black: hlavicka v akcentu, vyber pruhem, zadna zebra */
+  .preview[data-style="ticker-black"] .p-table thead th { color: var(--accent); }
+  .preview[data-style="ticker-black"] .p-table tbody tr[data-sel="true"] td { background: var(--accsoft); }
+  .preview[data-style="ticker-black"] .p-table tbody tr[data-sel="true"] td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+  .preview[data-style="ticker-black"] .p-brand .sub { color: var(--accent); }
+
+  /* mono-brutal: invertovana hlavicka, tvrdy posunuty stin, verzalky */
+  .preview[data-style="mono-brutal"] .p-table thead th { color: var(--pane); }
+  .preview[data-style="mono-brutal"] .p-panehead,
+  .preview[data-style="mono-brutal"] .p-brand { text-transform: uppercase; letter-spacing: .5px; }
+  .preview[data-style="mono-brutal"] .p-panehead { background: none; border-bottom-width: var(--border-w); }
+  .preview[data-style="mono-brutal"] .p-navitem[aria-current="true"] { background: var(--accsoft); color: #000; }
+  .preview[data-style="mono-brutal"] .p-navitem[aria-current="true"] .icon { color: #000; }
+  .preview[data-style="mono-brutal"] .p-table tbody tr:hover td { color: #000; }
+  /* Vyber je plna zluta v obou rezimech, takze text v nem je vzdy cerny. */
+  .preview[data-style="mono-brutal"] .p-table tbody tr[data-sel="true"] td,
+  .preview[data-style="mono-brutal"] .p-table tbody tr[data-sel="true"] td .dim { color: #000; }
+  .preview[data-style="mono-brutal"] .p-field { border-width: var(--border-w); }
+
+  /* catppuccin-soft: vyber plochou misto pruhu, jemny stin pod panelem */
+  .preview[data-style="catppuccin-soft"] .p-table tbody tr[data-sel="true"] td:first-child { box-shadow: none; }
+  .preview[data-style="catppuccin-soft"] .p-navitem[aria-current="true"] { box-shadow: none; }
 
   /* ---- strukturální odchylky obou „AI" stylů ---- */
   .preview[data-style="saas-modern"] .p-state,
@@ -714,7 +1088,11 @@
     border: 0; border-radius: var(--nav-radius);
     background: none; color: var(--text);
     font: inherit; text-align: left; cursor: default;
+    /* Vyska je dana tokenem, takze popisek nesmi zalomit -- pri sirsim pismu
+       (mono styly) by druhy radek prekryl nasledujici polozku. */
+    white-space: nowrap; overflow: hidden;
   }
+  .p-navitem .lbl { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   .p-navitem:hover { background: var(--hover); }
   .p-navitem .icon { color: var(--dim); }
   .p-navitem[aria-current="true"] {
@@ -808,7 +1186,7 @@
   .st-warn .p-dot { background: var(--warn); }
   .st-crit .p-dot { background: var(--crit); }
   .st-man .p-dot { background: var(--accent); }
-  .dim { color: var(--faint); }
+  .dim { color: var(--dim); }  /* skutecny text, ne dekorace -- proto --dim, ne --faint */
 
   /* --- stavový řádek --- */
   .p-status {
@@ -967,7 +1345,7 @@
   <header class="masthead">
     <h1>Volba vizuálního stylu</h1>
     <p>
-      Táž aplikace vykreslená ve čtrnácti stylech. Markup je ve všech případech
+      Táž aplikace vykreslená ve dvaceti třech stylech. Markup je ve všech případech
       identický, mění se jen sada tokenů. Přepínej styl, světelný režim a obrazovku
       (<b>Tabulka</b> / <b>Grafy</b>) a porovnávej. Slug u vybraného stylu je to,
       co se pak zapíše do projektu jako <code>ui.style</code>.
@@ -1032,15 +1410,15 @@
       </div>
 
       <nav class="p-nav">
-        <button class="p-navitem" type="button"><svg class="icon"><use href="#s-grid"/></svg>Přehled</button>
-        <button class="p-navitem" type="button"><svg class="icon"><use href="#s-list"/></svg>Náklady domu</button>
-        <button class="p-navitem" type="button"><svg class="icon"><use href="#s-users"/></svg>Osoby</button>
-        <button class="p-navitem" type="button" aria-current="true"><svg class="icon"><use href="#s-bank"/></svg>Úhrady z Fio</button>
-        <button class="p-navitem" type="button"><svg class="icon"><use href="#s-doc"/></svg>Příspěvky a vyrovnání</button>
-        <button class="p-navitem" type="button"><svg class="icon"><use href="#s-lock"/></svg>Uzávěrky</button>
-        <button class="p-navitem" type="button"><svg class="icon"><use href="#s-sum"/></svg>Vyúčtování</button>
+        <button class="p-navitem" type="button" title="Přehled"><svg class="icon"><use href="#s-grid"/></svg><span class="lbl">Přehled</span></button>
+        <button class="p-navitem" type="button" title="Náklady domu"><svg class="icon"><use href="#s-list"/></svg><span class="lbl">Náklady domu</span></button>
+        <button class="p-navitem" type="button" title="Osoby"><svg class="icon"><use href="#s-users"/></svg><span class="lbl">Osoby</span></button>
+        <button class="p-navitem" type="button" aria-current="true" title="Úhrady z Fio"><svg class="icon"><use href="#s-bank"/></svg><span class="lbl">Úhrady z Fio</span></button>
+        <button class="p-navitem" type="button" title="Příspěvky a vyrovnání"><svg class="icon"><use href="#s-doc"/></svg><span class="lbl">Příspěvky a vyrovnání</span></button>
+        <button class="p-navitem" type="button" title="Uzávěrky"><svg class="icon"><use href="#s-lock"/></svg><span class="lbl">Uzávěrky</span></button>
+        <button class="p-navitem" type="button" title="Vyúčtování"><svg class="icon"><use href="#s-sum"/></svg><span class="lbl">Vyúčtování</span></button>
         <div class="p-navsec">Správa</div>
-        <button class="p-navitem" type="button"><svg class="icon"><use href="#s-gear"/></svg>Nastavení</button>
+        <button class="p-navitem" type="button" title="Nastavení"><svg class="icon"><use href="#s-gear"/></svg><span class="lbl">Nastavení</span></button>
       </nav>
 
       <main class="p-main">
@@ -1151,6 +1529,21 @@
       </footer>
     </div>
   </div>
+
+  <section class="audit">
+    <header>
+      <h2>Kontrola zobrazení</h2>
+      <p>
+        Nestandardní vzhled se musí bezpečně vykreslit i tam, kde chybí písmo nebo
+        je jiné rozlišení. Tohle měří <b>skutečně vykreslenou</b> stránku v tomto
+        prohlížeči — ne deklarované hodnoty: dostupnost písem, kontrast podle WCAG,
+        poměr výšky řádku k písmu a přetečení prvků s pevnou výškou.
+      </p>
+      <button type="button" id="auditOne">Zkontrolovat tento styl</button>
+      <button type="button" id="auditAll">Zkontrolovat všechny styly</button>
+    </header>
+    <div class="auditbody" id="auditOut"></div>
+  </section>
 
   <p class="note">Data v ukázce jsou smyšlená.</p>
 </div>
@@ -1300,6 +1693,123 @@
         row: "34 px",
         size: "15 / 14,5 px",
         zebra: "ne"
+      },
+      {
+        slug: "winbox-95",
+        name: "Nástrojové okno Win32",
+        lede: "WinBox doslova, ne jen inspirace: plastické okraje místo plochých linek, systémová šeď, řádek 20 px, výběr celý řádek plnou modrou. Tabulka sedí v zapuštěném rámu jako v nativním dialogu.",
+        use: "nástroj pro správce, který má vypadat jako součást Windows a zobrazit maximum řádků — inventář, zařízení, porty.",
+        sw: ["#316ac5", "#f0f0f0", "#ffffff", "#a0a0a0", "#1a7a1a"],
+        font: "Segoe UI / Tahoma",
+        data: "Lucida Console",
+        radius: "0 px",
+        row: "20 px",
+        size: "12 / 11,5 px",
+        zebra: "ano, jemná"
+      },
+      {
+        slug: "turbo-tui",
+        name: "Textová konzole",
+        lede: "Turbo Vision a Norton Commander. Dvojité rámečky, neproporcionální písmo úplně všude, ve tmavém režimu klasická modrá se žlutým akcentem a šestnáctibarevná paleta. Výběr je blok, ne podbarvení.",
+        use: "nástroje pro lidi, kteří stejně žijí v konzoli — běhy úloh, fronty, logy. Nebo když má být na první pohled jasné, že tohle není web.",
+        sw: ["#0000a8", "#00a8a8", "#fcfc54", "#54fcfc", "#54fc54"],
+        font: "Cascadia Mono",
+        data: "Cascadia Mono",
+        radius: "0 px",
+        row: "22 px",
+        size: "12,5 px",
+        zebra: "ne — jen výběr"
+      },
+      {
+        slug: "hmi-slate",
+        name: "Velín",
+        lede: "Průmyslový panel (SCADA / HMI). Ohraničení 2 px, hlavička panelu jako plný barevný pruh, stavový čtverec 11 px, hlavičky verzálkami. Barva tu není dekorace — je to signalizace, a proto je sytá.",
+        use: "obrazovka, na kterou se kouká z dálky nebo přes rameno — dohled, monitoring, stav linek a služeb.",
+        sw: ["#1e9de0", "#161c22", "#202a33", "#2fbf5a", "#ff4d4d"],
+        font: "Segoe UI",
+        data: "Cascadia Mono",
+        radius: "0 px",
+        row: "30 px",
+        size: "13,5 px",
+        zebra: "ano"
+      },
+      {
+        slug: "ticker-black",
+        name: "Burzovní terminál",
+        lede: "Čerň bez rámečků. Sloupce nedělí linky, ale barva; hlavičky jantarové, řádek 20 px, všechno neproporcionální. Spolu s ledger-mono nejhustší varianta v katalogu, ale bez jediné plochy navíc.",
+        use: "obrazovka, na které běží čísla a která je otevřená pořád — kurzy, měření, průběžné výsledky.",
+        sw: ["#ff9d00", "#000000", "#141414", "#00c853", "#ff3b30"],
+        font: "Cascadia Mono",
+        data: "Cascadia Mono",
+        radius: "0 px",
+        row: "20 px",
+        size: "12 px",
+        zebra: "ne"
+      },
+      {
+        slug: "solar-parchment",
+        name: "Teplá tlumená",
+        lede: "Paleta Solarized (ethanschoonover/solarized). Teplý pergamenový podklad místo bílé, nízký kontrast, ale kalibrovaný — ne vybledlý. Protipól k nord-calm: stejná logika, opačná teplota.",
+        use: "obrazovky pro dlouhé čtení v prosvětlené kanceláři, kde bílá plocha po pár hodinách pálí.",
+        sw: ["#268bd2", "#fdf6e3", "#eee8d5", "#cfc7ad", "#859900"],
+        font: "Segoe UI Variable",
+        data: "Cascadia Mono",
+        radius: "2 px",
+        row: "27 px",
+        size: "12,5 / 12 px",
+        zebra: "ano, jemná"
+      },
+      {
+        slug: "mono-brutal",
+        name: "Brutalistická",
+        lede: "Tvrdé černé linky 2 px, nulový rádius, posunutý plný stín místo rozostření, invertovaná hlavička tabulky, žlutá jako jediná barva navíc. Neproporcionální písmo i v rozhraní.",
+        use: "když má nástroj působit jako nářadí a ne jako produkt — a když ti nevadí, že si toho každý všimne.",
+        sw: ["#000000", "#ffffff", "#ffe600", "#f4f4f4", "#d10000"],
+        font: "Cascadia Mono",
+        data: "Cascadia Mono",
+        radius: "0 px",
+        row: "28 px",
+        size: "12,5 px",
+        zebra: "ano"
+      },
+      {
+        slug: "gruvbox-warm",
+        name: "Gruvbox",
+        lede: "Převzatá paleta morhetz/gruvbox v původních hodnotách. Retro teplé tóny, hnědošedý podklad, tlumená zelená a okrová. Nejznámější „teplá“ paleta mezi vývojáři — na rozdíl od solar-parchment je sytější a tmavší.",
+        use: "interní nástroj, který používají hlavně vývojáři a správci a má ladit s jejich editorem.",
+        sw: ["#83a598", "#282828", "#fbf1c7", "#fabd2f", "#b8bb26"],
+        font: "Segoe UI",
+        data: "Cascadia Mono",
+        radius: "2 px",
+        row: "26 px",
+        size: "12,5 / 12 px",
+        zebra: "ano, jemná"
+      },
+      {
+        slug: "catppuccin-soft",
+        name: "Catppuccin",
+        lede: "Převzatá paleta catppuccin/catppuccin — varianta Latte (světlá) a Mocha (tmavá). Levandulové neutrály místo šedé, pastelové stavové barvy, zaoblení 6 px, řádek 30 px. Nejměkčí styl v katalogu.",
+        use: "aplikace, u které je hlavní, aby se na ni dalo dívat dlouho a nikoho nedráždila — a hustota dat není to první.",
+        sw: ["#89b4fa", "#1e1e2e", "#eff1f5", "#a6e3a1", "#f38ba8"],
+        font: "Segoe UI Variable",
+        data: "Cascadia Mono",
+        radius: "6 px",
+        row: "30 px",
+        size: "13 / 12,5 px",
+        zebra: "ano, jemná"
+      },
+      {
+        slug: "tokyo-night",
+        name: "Tokyo Night",
+        lede: "Převzatá paleta enkia/tokyo-night — Night (tmavá) a Day (světlá). Modrofialový podklad, chladné akcenty, ve světlé variantě nese modrou i samotný text. Zaoblení 4 px, řádek 27 px.",
+        use: "tmavá obrazovka, která má vypadat současně, ale ne jako AI šablona — hodí se na dohledové a vývojářské nástroje.",
+        sw: ["#7aa2f7", "#1a1b26", "#292e42", "#9ece6a", "#f7768e"],
+        font: "Segoe UI Variable",
+        data: "Cascadia Mono",
+        radius: "4 px",
+        row: "27 px",
+        size: "12,5 / 12 px",
+        zebra: "ano, jemná"
       },
       {
         slug: "admin-common",
@@ -1716,6 +2226,292 @@
     });
 
     renderAll();
+  })();
+</script>
+<script>
+  /* ==========================================================================
+     KONTROLA ZOBRAZENI
+     Meri vykreslenou stranku, ne tokeny: jestli je pismo opravdu k dispozici,
+     jaky ma text kontrast na svem skutecnem podkladu, jestli se radek vejde
+     do sve vysky a jestli neco nepretyka. Kdyz se prida styl nebo zmeni token,
+     tohle rekne, co se rozbilo -- misto aby se na to prislo az na cizim PC.
+     ========================================================================== */
+  (function () {
+    var preview = document.getElementById("preview");
+    var out = document.getElementById("auditOut");
+
+    var GENERIC = /^(monospace|serif|sans-serif|system-ui|ui-monospace|ui-sans-serif|cursive|fantasy|-apple-system|BlinkMacSystemFont)$/i;
+
+    /* --- pismo: je rodina na tomhle stroji vubec k dispozici? --- */
+    var fontCache = {};
+    function fontAvailable(name) {
+      if (GENERIC.test(name)) return true;
+      if (name in fontCache) return fontCache[name];
+      var c = document.createElement("canvas").getContext("2d");
+      var probe = "mmmmmmmmmmlliWWW@#0123456789";
+      var res = ["monospace", "serif", "sans-serif"].some(function (base) {
+        c.font = "72px " + base;
+        var w0 = c.measureText(probe).width;
+        c.font = '72px "' + name + '",' + base;
+        return Math.abs(c.measureText(probe).width - w0) > 0.5;
+      });
+      fontCache[name] = res;
+      return res;
+    }
+
+    function families(stack) {
+      return stack.split(",").map(function (f) {
+        return f.trim().replace(/^["']|["']$/g, "");
+      }).filter(Boolean);
+    }
+
+    /* --- barvy --- */
+    /* [r,g,b,a]; null kdyz to nejde precist */
+    function colorOf(v) {
+      v = (v || "").trim();
+      var m;
+      if ((m = v.match(/^#([0-9a-f]{3})$/i))) {
+        return [parseInt(m[1][0] + m[1][0], 16), parseInt(m[1][1] + m[1][1], 16), parseInt(m[1][2] + m[1][2], 16), 1];
+      }
+      if ((m = v.match(/^#([0-9a-f]{6})$/i))) {
+        return [parseInt(m[1].slice(0, 2), 16), parseInt(m[1].slice(2, 4), 16), parseInt(m[1].slice(4, 6), 16), 1];
+      }
+      if ((m = v.match(/^rgba?\(([^)]+)\)$/i))) {
+        var p = m[1].split(/[\s,\/]+/).filter(Boolean).map(parseFloat);
+        return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1];
+      }
+      if (/^transparent$/i.test(v)) return [0, 0, 0, 0];
+      return null;
+    }
+
+    function over(fg, bg) {
+      var a = fg[3];
+      return [fg[0] * a + bg[0] * (1 - a), fg[1] * a + bg[1] * (1 - a), fg[2] * a + bg[2] * (1 - a)];
+    }
+
+    /* Skutecny podklad prvku: pruhledne pozadi se prohleda smerem k rodici. */
+    function effBg(el) {
+      var e = el, stack = [];
+      while (e && e !== document.documentElement) {
+        var c = colorOf(getComputedStyle(e).backgroundColor);
+        if (c && c[3] > 0) { stack.push(c); if (c[3] >= 0.999) break; }
+        e = e.parentElement;
+      }
+      var base = [255, 255, 255];
+      for (var i = stack.length - 1; i >= 0; i--) base = over(stack[i], base);
+      return base;
+    }
+
+    /* Barva popredi tak, jak se opravdu vykresli -- vcetne opacity prvku. */
+    function effFg(el, bg) {
+      var cs = getComputedStyle(el);
+      var c = colorOf(cs.color);
+      if (!c) return null;
+      var op = parseFloat(cs.opacity);
+      if (!isNaN(op) && op < 1) c = [c[0], c[1], c[2], c[3] * op];
+      return over(c, bg);
+    }
+
+    function lum(rgb) {
+      var s = rgb.map(function (c) {
+        c = c / 255;
+        return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * s[0] + 0.7152 * s[1] + 0.0722 * s[2];
+    }
+
+    function contrast(a, b) {
+      if (!a || !b) return null;
+      var l1 = lum(a), l2 = lum(b);
+      return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+    }
+
+    function tok(cs, name) { return cs.getPropertyValue(name).trim(); }
+
+    /* Kontrast textu prvku proti jeho skutecnemu podkladu. */
+    function textRatio(sel, bgSel) {
+      var el = preview.querySelector(sel);
+      if (!el) return null;
+      var bg = effBg(bgSel ? (preview.querySelector(bgSel) || el) : el);
+      var fg = effFg(el, bg);
+      return fg ? contrast(fg, bg) : null;
+    }
+
+    /* Kontrast barevne plosky (stavovy ctverec) proti podkladu radku. */
+    function markRatio(sel) {
+      var el = preview.querySelector(sel);
+      if (!el) return null;
+      var cs = getComputedStyle(el);
+      var c = colorOf(cs.backgroundColor);
+      if (!c) return null;
+      var bg = effBg(el.parentElement || el);
+      return contrast(over(c, bg), bg);
+    }
+
+    /* --- jeden styl --- */
+    function auditCurrent() {
+      var cs = getComputedStyle(preview);
+      var rows = [];
+
+      function add(group, label, verdict, value, note) {
+        rows.push({ group: group, label: label, verdict: verdict, value: value, note: note || "" });
+      }
+
+      /* pisma */
+      [["Písmo UI", "--font-ui"], ["Písmo nadpisů", "--font-display"], ["Písmo dat", "--font-data"]]
+        .forEach(function (pair) {
+          var stack = families(tok(cs, pair[1]));
+          var first = stack[0];
+          var used = null;
+          for (var i = 0; i < stack.length; i++) {
+            if (fontAvailable(stack[i])) { used = stack[i]; break; }
+          }
+          if (used === first) {
+            add("Písma", pair[0], "pass", first, "k dispozici");
+          } else if (used) {
+            add("Písma", pair[0], "warn", first + " → " + used,
+                "první volba na tomto stroji chybí, kreslí se náhrada");
+          } else {
+            add("Písma", pair[0], "fail", first, "nedostupné a záložní řada nemá systémovou rodinu");
+          }
+        });
+
+      /* Kontrast se meri na skutecnych prvcich nahledu, ne na tokenech --
+         styl si smi hlavicku prebarvit a kontrola to musi videt. */
+      // Bezny radek se musi merit mimo vyber -- vybrany radek si vetsina stylu
+      // prebarvuje a mericka by pak hodnotila neco jineho, nez rika popisek.
+      var norm = '.p-table tbody tr:not([data-sel="true"]) ';
+      var sel = '.p-table tbody tr[data-sel="true"] ';
+      // [popisek, pomer, pozadavek, spodni mez, poznamka]
+      // Pod pozadavkem je vyhrada, pod spodni mezi chyba. Doplnkovy text a
+      // barevne znacky maji nizsi latku uz podle WCAG (nejsou to vety).
+      var checks = [
+        ["Text v tabulce", textRatio(norm + "td:nth-child(4)"), 4.5, 4.5, "běžný text řádku"],
+        ["Číselné sloupce", textRatio(norm + "td.c-date"), 4.5, 4.0, "datum, VS — tlumené záměrně"],
+        ["Poznámka v tabulce", textRatio(norm + "td .dim"), 4.5, 3.0, "text za jménem plátce"],
+        ["Doplňkový text", textRatio(".p-navsec"), 3.0, 3.0, "nadpis sekce menu"],
+        ["Hlavička tabulky", textRatio(".p-table thead th"), 4.5, 4.0, "názvy sloupců"],
+        ["Titulek aplikace", textRatio(".p-brand"), 4.5, 4.0, "text na horní liště"],
+        ["Stavový řádek", textRatio(".p-status"), 4.5, 3.0, "souhrn dole"],
+        ["Vybraná položka menu", textRatio('.p-navitem[aria-current="true"]'), 4.5, 4.5, "text na akcentu"],
+        ["Vybraný řádek", textRatio(sel + "td:nth-child(4)"), 4.5, 4.5, "text ve zvýrazněném řádku"],
+        ["Poznámka ve výběru", textRatio(sel + "td .dim"), 4.5, 3.0, "text za jménem ve výběru"],
+        ["Značka v pořádku", markRatio(norm + ".st-ok .p-dot"), 3.0, 3.0, "grafický prvek, ne text"],
+        ["Značka varování", markRatio(norm + ".st-warn .p-dot"), 3.0, 3.0, "grafický prvek, ne text"],
+        ["Značka kritické", markRatio(norm + ".st-crit .p-dot"), 3.0, 3.0, "grafický prvek, ne text"]
+      ];
+      checks.forEach(function (c) {
+        var r = c[1];
+        if (r === null || isNaN(r)) { add("Kontrast", c[0], "warn", "?", "prvek nelze změřit"); return; }
+        var v = r >= c[2] ? "pass" : (r >= c[3] ? "warn" : "fail");
+        add("Kontrast", c[0], v, r.toFixed(2) + ":1",
+            "požadavek " + c[2].toFixed(1) + ":1" + (c[3] < c[2] ? " (mez " + c[3].toFixed(1) + ")" : "") + " — " + c[4]);
+      });
+
+      /* hustota */
+      var rowH = parseFloat(tok(cs, "--row-h"));
+      var fsData = parseFloat(tok(cs, "--fs-data"));
+      var ratio = rowH / fsData;
+      add("Hustota", "Výška řádku k písmu dat",
+          ratio >= 1.55 ? "pass" : (ratio >= 1.4 ? "warn" : "fail"),
+          ratio.toFixed(2) + "×",
+          rowH + " px řádek / " + fsData + " px písmo — pod 1,55× začne text lícovat na okraj");
+      add("Hustota", "Řádků na 500 px", "pass", Math.floor(500 / rowH) + "", "kolik dat se vejde na obrazovku");
+
+      /* pretekani prvku s pevnou vyskou */
+      var over = [];
+      preview.querySelectorAll(".p-navitem, .p-panehead, .p-toolbar, .p-title, .p-status, .p-table tbody td")
+        .forEach(function (el) {
+          // Prvky, ktere maji posuvnik zamerne (lista nastroju), nejsou chyba --
+          // jejich obsah smi byt vetsi nez ramecek. Chyba je jen tam, kde se
+          // obsah nema kam podet a prekryje sousedni radek.
+          var oy = getComputedStyle(el).overflowY;
+          if (oy === "auto" || oy === "scroll") return;
+          if (el.scrollHeight > el.clientHeight + 1) {
+            var name = el.className.split(" ")[0] || el.tagName.toLowerCase();
+            if (over.indexOf(name) < 0) over.push(name);
+          }
+        });
+      add("Rozměry", "Přetečení prvků s pevnou výškou",
+          over.length ? "fail" : "pass",
+          over.length ? over.join(", ") : "0",
+          over.length ? "obsah je vyšší než vyhrazená výška — text se překryje" : "vše se vejde do své výšky");
+
+      /* vodorovne pretekani stranky */
+      add("Rozměry", "Vodorovné přetečení náhledu",
+          preview.scrollWidth > preview.clientWidth + 1 ? "warn" : "pass",
+          preview.scrollWidth + " / " + preview.clientWidth + " px",
+          "mřížka má vlastní posuvník, přetékat má jen ona");
+
+      return rows;
+    }
+
+    function worst(rows) {
+      return rows.some(function (r) { return r.verdict === "fail"; }) ? "fail"
+        : rows.some(function (r) { return r.verdict === "warn"; }) ? "warn" : "pass";
+    }
+
+    var MARK = { pass: "✓ v pořádku", warn: "! pozor", fail: "× chyba" };
+
+    function renderOne(slug, rows) {
+      var groups = [];
+      rows.forEach(function (r) { if (groups.indexOf(r.group) < 0) groups.push(r.group); });
+      var html = "";
+      groups.forEach(function (g) {
+        html += '<table class="audittable"><caption>' + g + "</caption><tbody>";
+        rows.filter(function (r) { return r.group === g; }).forEach(function (r) {
+          html += "<tr><th>" + r.label + "</th>"
+                + '<td class="v">' + r.value + "</td>"
+                + '<td><span class="verdict ' + r.verdict + '">' + MARK[r.verdict] + "</span></td>"
+                + '<td class="note">' + r.note + "</td></tr>";
+        });
+        html += "</tbody></table>";
+      });
+      out.innerHTML = '<p class="note" style="padding-top:11px">Styl <b>' + slug
+        + "</b> · měřeno v tomto prohlížeči, v právě zvoleném světelném režimu.</p>" + html;
+    }
+
+    document.getElementById("auditOne").addEventListener("click", function () {
+      renderOne(preview.dataset.style, auditCurrent());
+    });
+
+    document.getElementById("auditAll").addEventListener("click", function () {
+      var btn = this;
+      btn.disabled = true;
+      var back = preview.dataset.style;
+      var slugs = Array.prototype.map.call(
+        document.querySelectorAll("#tabs .styletab"), function (b) { return b.dataset.slug; });
+      var res = [];
+      slugs.forEach(function (slug) {
+        window.__applyStyle(slug);
+        void preview.offsetHeight;              /* vynutit prepocet rozvrzeni */
+        var rows = auditCurrent();
+        res.push({
+          slug: slug,
+          worst: worst(rows),
+          bad: rows.filter(function (r) { return r.verdict !== "pass"; })
+        });
+      });
+      window.__applyStyle(back);
+      btn.disabled = false;
+
+      var html = '<table class="auditmatrix"><caption class="audittable">Všechny styly</caption>'
+        + "<thead><tr><th>Styl</th><th>Výsledek</th><th>Co neprošlo</th></tr></thead><tbody>";
+      res.forEach(function (r) {
+        html += '<tr data-worst="' + r.worst + '"><td class="slug">' + r.slug + "</td>"
+             + '<td><span class="verdict ' + r.worst + '">' + MARK[r.worst] + "</span></td>"
+             + "<td>" + (r.bad.length
+                 ? r.bad.map(function (b) { return b.label + " (" + b.value + ")"; }).join(" · ")
+                 : "—") + "</td></tr>";
+      });
+      html += "</tbody></table>";
+      var counts = { pass: 0, warn: 0, fail: 0 };
+      res.forEach(function (r) { counts[r.worst]++; });
+      out.innerHTML = '<p class="note" style="padding-top:11px">' + res.length + " stylů · "
+        + counts.pass + " bez připomínky · " + counts.warn + " s výhradou · " + counts.fail
+        + " s chybou. Měřeno v tomto prohlížeči a v právě zvoleném světelném režimu — "
+        + "na jiném stroji se výsledek u písem může lišit.</p>" + html;
+    });
   })();
 </script>
 </body>
